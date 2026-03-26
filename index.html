@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#0f172a">
+  <link rel="manifest" href="/manifest.json">
+  <title>Lev Assistant</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    :root {
+      --bg: #0f172a; --surface: #1e293b; --surface2: #334155; --border: #475569;
+      --text: #f1f5f9; --text2: #94a3b8; --text3: #64748b;
+      --accent: #3b82f6; --accent2: #2563eb; --green: #10b981; --red: #ef4444;
+      --gold: #f59e0b; --purple: #8b5cf6; --pink: #ec4899; --cyan: #06b6d4;
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+    }
+    body { font-family: -apple-system, BlinkMacSystemFont, "SF Pro", "Segoe UI", sans-serif; background: var(--bg); color: var(--text); min-height: 100dvh; overflow-x: hidden; }
+
+    /* ââ App Shell ââ */
+    #app { display: flex; flex-direction: column; height: 100dvh; }
+    .screen { display: none; flex: 1; overflow-y: auto; padding: 16px 16px calc(80px + var(--safe-bottom)); }
+    .screen.active { display: flex; flex-direction: column; }
+
+    /* ââ Header ââ */
+    .header { padding: 12px 16px; padding-top: calc(12px + env(safe-area-inset-top, 0px)); background: var(--bg); border-bottom: 1px solid var(--surface); position: sticky; top: 0; z-index: 10; }
+    .header h1 { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; }
+    .header p { font-size: 12px; color: var(--text2); margin-top: 2px; }
+
+    /* ââ Bottom Nav ââ */
+    .nav { position: fixed; bottom: 0; left: 0; right: 0; background: var(--surface); border-top: 1px solid var(--surface2); display: flex; padding-bottom: var(--safe-bottom); z-index: 100; }
+    .nav-btn { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 10px 4px 8px; background: none; border: none; color: var(--text3); font-size: 10px; font-weight: 600; cursor: pointer; transition: color 0.2s; }
+    .nav-btn.active { color: var(--accent); }
+    .nav-btn svg { width: 22px; height: 22px; }
+
+    /* ââ Cards ââ */
+    .card { background: var(--surface); border-radius: 16px; padding: 16px; margin-bottom: 12px; border: 1px solid var(--surface2); }
+    .card-title { font-size: 14px; font-weight: 700; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+    .card-title .icon { width: 28px; height: 28px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; }
+
+    /* ââ Quick Stats ââ */
+    .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+    .stat-card { background: var(--surface); border-radius: 14px; padding: 14px; border: 1px solid var(--surface2); }
+    .stat-value { font-size: 24px; font-weight: 800; }
+    .stat-label { font-size: 11px; color: var(--text2); margin-top: 2px; }
+
+    /* ââ Schedule Items ââ */
+    .schedule-item { display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 12px; margin-bottom: 6px; background: rgba(255,255,255,0.03); }
+    .schedule-item .time { font-size: 12px; color: var(--text2); width: 60px; flex-shrink: 0; font-weight: 600; }
+    .schedule-item .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .schedule-item .event-name { font-size: 14px; font-weight: 600; flex: 1; }
+    .schedule-item.done { opacity: 0.4; }
+    .schedule-item.done .event-name { text-decoration: line-through; }
+
+    /* ââ Chat ââ */
+    .chat-container { flex: 1; display: flex; flex-direction: column; }
+    .chat-messages { flex: 1; overflow-y: auto; padding: 8px 0; }
+    .msg { max-width: 85%; padding: 12px 16px; border-radius: 18px; margin-bottom: 8px; font-size: 15px; line-height: 1.45; word-wrap: break-word; }
+    .msg.user { background: var(--accent); margin-left: auto; border-bottom-right-radius: 4px; }
+    .msg.assistant { background: var(--surface2); margin-right: auto; border-bottom-left-radius: 4px; }
+    .msg.system { background: transparent; color: var(--text3); font-size: 12px; text-align: center; max-width: 100%; }
+    .chat-input-area { display: flex; gap: 8px; padding: 12px 0 4px; position: sticky; bottom: 80px; background: var(--bg); }
+    .chat-input { flex: 1; background: var(--surface); border: 1px solid var(--surface2); border-radius: 24px; padding: 12px 18px; color: var(--text); font-size: 15px; outline: none; resize: none; max-height: 120px; font-family: inherit; }
+    .chat-input::placeholder { color: var(--text3); }
+    .chat-input:focus { border-color: var(--accent); }
+    .send-btn { width: 44px; height: 44px; border-radius: 50%; background: var(--accent); border: none; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; align-self: flex-end; }
+    .send-btn:disabled { opacity: 0.4; }
+    .send-btn:active { background: var(--accent2); }
+    .typing-indicator { display: flex; gap: 4px; padding: 12px 16px; }
+    .typing-indicator span { width: 8px; height: 8px; border-radius: 50%; background: var(--text3); animation: typing 1.4s infinite; }
+    .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+    .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes typing { 0%, 60%, 100% { transform: translateY(0); } 30% { transform: translateY(-6px); } }
+
+    /* ââ Email ââ */
+    .email-item { display: flex; gap: 12px; padding: 14px; border-radius: 12px; margin-bottom: 6px; background: rgba(255,255,255,0.03); cursor: pointer; }
+    .email-item:active { background: rgba(255,255,255,0.06); }
+    .email-avatar { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 16px; flex-shrink: 0; }
+    .email-content { flex: 1; min-width: 0; }
+    .email-from { font-size: 14px; font-weight: 700; }
+    .email-subject { font-size: 13px; color: var(--text2); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .email-date { font-size: 11px; color: var(--text3); flex-shrink: 0; }
+    .email-unread .email-from { color: var(--accent); }
+    .compose-btn { position: fixed; bottom: calc(90px + var(--safe-bottom)); right: 20px; width: 56px; height: 56px; border-radius: 50%; background: var(--accent); border: none; color: white; font-size: 24px; cursor: pointer; box-shadow: 0 4px 12px rgba(59,130,246,0.4); z-index: 50; display: flex; align-items: center; justify-content: center; }
+
+    /* ââ Reminders ââ */
+    .reminder-item { display: flex; align-items: center; gap: 12px; padding: 14px; border-radius: 12px; margin-bottom: 8px; background: rgba(255,255,255,0.03); }
+    .reminder-check { width: 24px; height: 24px; border-radius: 50%; border: 2px solid var(--text3); cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+    .reminder-check.done { background: var(--green); border-color: var(--green); }
+    .reminder-text { flex: 1; }
+    .reminder-title { font-size: 14px; font-weight: 600; }
+    .reminder-time { font-size: 11px; color: var(--text2); margin-top: 2px; }
+    .reminder-priority { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .add-reminder-bar { display: flex; gap: 8px; margin-bottom: 16px; }
+    .add-reminder-input { flex: 1; background: var(--surface); border: 1px solid var(--surface2); border-radius: 14px; padding: 12px 16px; color: var(--text); font-size: 14px; outline: none; font-family: inherit; }
+    .add-reminder-input::placeholder { color: var(--text3); }
+    .add-reminder-btn { padding: 12px 18px; border-radius: 14px; background: var(--accent); border: none; color: white; font-weight: 700; font-size: 14px; cursor: pointer; white-space: nowrap; }
+
+    /* ââ Projects ââ */
+    .project-card { background: var(--surface); border-radius: 16px; padding: 16px; margin-bottom: 12px; border: 1px solid var(--surface2); cursor: pointer; }
+    .project-card:active { border-color: var(--accent); }
+    .project-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+    .project-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+    .project-name { font-size: 16px; font-weight: 700; flex: 1; }
+    .project-status { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 10px; }
+    .project-desc { font-size: 13px; color: var(--text2); line-height: 1.4; }
+    .project-tasks { margin-top: 12px; }
+    .project-task { display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-radius: 8px; margin-bottom: 4px; background: rgba(255,255,255,0.03); font-size: 13px; }
+    .project-task .pdot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+    .progress-bar { height: 4px; border-radius: 2px; background: var(--surface2); margin-top: 10px; overflow: hidden; }
+    .progress-fill { height: 100%; border-radius: 2px; transition: width 0.5s ease; }
+
+    /* ââ Modal / Compose ââ */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 200; display: none; align-items: flex-end; justify-content: center; }
+    .modal-overlay.show { display: flex; }
+    .modal { background: var(--surface); border-radius: 20px 20px 0 0; width: 100%; max-height: 85dvh; padding: 20px; padding-bottom: calc(20px + var(--safe-bottom)); overflow-y: auto; }
+    .modal-title { font-size: 18px; font-weight: 800; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; }
+    .modal-close { background: var(--surface2); border: none; color: var(--text); width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 16px; }
+    .form-field { margin-bottom: 14px; }
+    .form-label { font-size: 12px; font-weight: 600; color: var(--text2); margin-bottom: 6px; display: block; }
+    .form-input { width: 100%; background: var(--bg); border: 1px solid var(--surface2); border-radius: 12px; padding: 12px 14px; color: var(--text); font-size: 14px; outline: none; font-family: inherit; }
+    .form-input:focus { border-color: var(--accent); }
+    textarea.form-input { min-height: 120px; resize: vertical; }
+    .form-submit { width: 100%; padding: 14px; border-radius: 14px; background: var(--accent); border: none; color: white; font-size: 16px; font-weight: 700; cursor: pointer; }
+    .form-submit:active { background: var(--accent2); }
+
+    /* ââ Notification Banner ââ */
+    .notif-banner { position: fixed; top: 0; left: 0; right: 0; background: var(--green); color: white; padding: 14px 16px; padding-top: calc(14px + env(safe-area-inset-top, 0px)); font-size: 14px; font-weight: 600; text-align: center; z-index: 300; transform: translateY(-100%); transition: transform 0.3s ease; }
+    .notif-banner.show { transform: translateY(0); }
+
+    /* ââ Settings ââ */
+    .settings-item { display: flex; justify-content: space-between; align-items: center; padding: 14px; border-radius: 12px; margin-bottom: 6px; background: rgba(255,255,255,0.03); }
+    .settings-label { font-size: 14px; font-weight: 600; }
+    .settings-desc { font-size: 12px; color: var(--text2); margin-top: 2px; }
+    .settings-input { background: var(--bg); border: 1px solid var(--surface2); border-radius: 10px; padding: 8px 12px; color: var(--text); font-size: 13px; width: 200px; text-align: right; outline: none; }
+
+    /* ââ Badge ââ */
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 8px; font-size: 11px; font-weight: 600; }
+
+    /* ââ Empty state ââ */
+    .empty-state { text-align: center; padding: 40px 20px; color: var(--text3); }
+    .empty-state .emoji { font-size: 48px; margin-bottom: 12px; }
+    .empty-state p { font-size: 14px; }
+
+    /* ââ Scrollbar ââ */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-thumb { background: var(--surface2); border-radius: 2px; }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <!-- Notification Banner -->
+    <div class="notif-banner" id="notifBanner"></div>
+
+    <!-- âââ HOME SCREEN âââ -->
+    <div class="screen active" id="screen-home">
+      <div class="header">
+        <h1 id="greeting">Good morning, Lev</h1>
+        <p id="dateDisplay"></p>
+      </div>
+
+      <div style="padding-top:12px">
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-value" style="color:var(--gold)" id="statProjects">4</div>
+            <div class="stat-label">Active Projects</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" style="color:var(--red)" id="statReminders">0</div>
+            <div class="stat-label">Reminders Today</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" style="color:var(--accent)" id="statEmails">â</div>
+            <div class="stat-label">Unread Emails</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" style="color:var(--green)" id="statEvents">â</div>
+            <div class="stat-label">Events Today</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            <div class="icon" style="background:rgba(59,130,246,0.15)">ð</div>
+            Today's Schedule
+          </div>
+          <div id="scheduleList">
+            <div class="empty-state"><p>Loading calendar...</p></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            <div class="icon" style="background:rgba(249,115,22,0.15)">ð¬</div>
+            Recent Emails
+          </div>
+          <div id="recentEmails">
+            <div class="empty-state"><p>Loading emails...</p></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            <div class="icon" style="background:rgba(139,92,246,0.15)">â°</div>
+            Upcoming Reminders
+          </div>
+          <div id="homeReminders">
+            <div class="empty-state"><p>No reminders set</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- âââ CHAT SCREEN âââ -->
+    <div class="screen" id="screen-chat">
+      <div class="header">
+        <h1>ð¬ Claude</h1>
+        <p>Your AI assistant â ask anything</p>
+      </div>
+      <div class="chat-container">
+        <div class="chat-messages" id="chatMessages">
+          <div class="msg system">Chat with Claude about your projects, schedule, or anything else. Your conversation continues where you left off.</div>
+          <div class="msg assistant">Hey Lev! I'm connected and ready to help. What are you working on?</div>
+        </div>
+        <div class="chat-input-area">
+          <textarea class="chat-input" id="chatInput" rows="1" placeholder="Message Claude..." onkeydown="if(event.key==='Enter&&!event.shiftKey){event.preventDefault();sendChat()}"></textarea>
+          <button class="send-btn" id="sendBtn" onclick="sendChat()">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- âââ EMAIL SCREEN âââ -->
+    <div class="screen" id="screen-email">
+      <div class="header">
+        <h1>ð§ Email</h1>
+        <p>Gmail â¤ lev.cooper@gmail.com</p>
+      </div>
+      <div style="padding-top:12px">
+        <div style="display:flex;gap:8px;margin-bottom:14px;overflow-x8 %]]È]ÛÛ\ÜÏHYÙHÝ[OHXÚÙÜÝ[\KXXØÙ[
+NØÛÛÜÚ]NÜY[ÎMØÜ\ÛNØÜ\\Y]\ÎÙÛ\Ú^NLÜØÝ\ÛÜÚ[\ÝÚ]K\ÜXÙNÝÜ\ÛÛXÚÏHØY[XZ[Ê	Ú\Î[XY	ÊH[XYØ]Û]ÛÛ\ÜÏHYÙHÝ[OHXÚÙÜÝ[\K\Ý\XÙLNØÛÛÜ\K]^
+NÜY[ÎMØÜ\ÛNØÜ\\Y]\ÎÙÛ\Ú^NLÜØÝ\ÛÜÚ[\ÝÚ]K\ÜXÙNÝÜ\ÛÛXÚÏHØY[XZ[Ê	Ú\Î[\Ü[	ÊH[\Ü[Ø]Û]ÛÛ\ÜÏHYÙHÝ[OHXÚÙÜÝ[\K\Ý\XÙLNØÛÛÜ\K]^
+NÜY[ÎMØÜ\ÛNØÜ\\Y]\ÎÙÛ\Ú^NLÜØÝ\ÛÜÚ[\ÝÚ]K\ÜXÙNÝÜ\ÛÛXÚÏHØY[XZ[Ê	ÙÛNYIÊHÙ[Ø]Û]ÛÛ\ÜÏHYÙHÝ[OHXÚÙÜÝ[\K\Ý\XÙLNØÛÛÜ\K]^
+NÜY[ÎMØÜ\ÛNØÜ\\Y]\ÎÙÛ\Ú^NLÜØÝ\ÛÜÚ[\ÝÚ]K\ÜXÙNÝÜ\ÛÛXÚÏHØY[XZ[Ê	ÉÊH[Ø]ÛÙ]]YH[XZ[\Ý]Û\ÜÏH[\K\Ý]HØY[È[XZ[ËÜÙ]Ù]Ù]]ÛÛ\ÜÏHÛÛ\ÜÙKXÛÛXÚÏHÚÝÐÛÛ\ÜÙJ
+HÝÈÚYHZYÚHY]ÐÞH[HÛHÝÚÙOHÝ\[ÛÛÜÝÚÙK]ÚYHÝÚÙK[[XØ\HÝ[[HOHLLOHHHLLHNHÏ[HOHHLOHLHNHLHLÏÜÝÏØ]ÛÙ]KKH8¥d8¥d8¥dSRSTÈÐÔQS8¥d8¥d8¥dKO]Û\ÜÏHØÜY[YHØÜY[\[Z[\È]Û\ÜÏHXY\O¸£ì[Z[\ÏÚOÙ][\È[Ý^HÛXÚÏÜÙ]]Ý[OHY[Ë]ÜL]Û\ÜÏHY\[Z[\X\[]Û\ÜÏHY\[Z[\Z[]YH[Z[\[]XÙZÛ\HYH[Z[\
+KË	ÐØ[Û]ÜIÊHÛÙ^YÝÛHY][Ù^OOOIÑ[\ÊXY[Z[\
+H]ÛÛ\ÜÏHY\[Z[\XÛÛXÚÏHY[Z[\
+HYØ]ÛÙ]]YH[Z[\Ó\ÝÙ]Ù]Ù]KKH8¥d8¥d8¥d$ÒPÕÈÐÔQS8¥d8¥d8¥dKO]Û\ÜÏHØÜY[YHØÜY[\ÚXÝÈ]Û\ÜÏHXY\O¼'äàHÚXÝÏÚO[Ý\\Ú[\ÜÙ\È[XÝ]HÛÜÏÜÙ]]Ý[OHY[Ë]ÜLYHÚXÝÓ\ÝÙ]Ù]KKH8¥d8¥d8¥dÕÓHU8¥d8¥d8¥dKO]Û\ÜÏH]]ÛÛ\ÜÏH]XXÝ]HÛÛXÚÏHÝÚ]ÚX	ÚÛYIÊH]K]XHÛYHÝÈY]ÐÞH[HÛHÝÚÙOHÝ\[ÛÛÜÝÚÙK]ÚYHÝÚÙK[[XØ\HÝ[ÝÚÙK[[ZÚ[HÝ[]HLÈ[KMÈHÝLXLKLXLKLLÏÛ[[HÚ[ÏHHHLMHLMHÏÜÝÏÛYBØ]Û]ÛÛ\ÜÏH]XÛÛXÚÏHÝÚ]ÚX	ØÚ]	ÊH]K]XHÚ]ÝÈY]ÐÞH[HÛHÝÚÙOHÝ\[ÛÛÜÝÚÙK]ÚYHÝÚÙK[[XØ\HÝ[ÝÚÙK[[ZÚ[HÝ[]HLHMXLKLÛMXLHLMLHÏÜÝÏÚ]Ø]Û]ÛÛ\ÜÏH]XÛÛXÚÏHÝÚ]ÚX	Ù[XZ[	ÊH]K]XH[XZ[ÝÈY]ÐÞH[HÛHÝÚÙOHÝ\[ÛÛÜÝÚÙK]ÚYHÝÚÙK[[XØ\HÝ[ÝÚÙK[[ZÚ[HÝ[]HMMÌKHHLÌKKKHLËLKHLKKLLÌLKKKLLÏÛ[[HÚ[ÏHLLÈÏÜÝÏ[XZ[Ø]Û]ÛÛ\ÜÏH]XÛÛXÚÏHÝÚ]ÚX	Ü[Z[\ÉÊH]K]XH[Z[\ÈÝÈY]ÐÞH[HÛHÝÚÙOHÝ\[ÛÛÜÝÚÙK]ÚYHÝÚÙK[[XØ\HÝ[ÝÚÙK[[ZÚ[HÝ[Ú\ÛHÞHLÞOHLHLÏÛ[[HÚ[ÏHLLLMMÏÜÝÏ[Z[\ÂØ]Û]ÛÛ\ÜÏH]XÛÛXÚÏHÝÚ]ÚX	ÜÚXÝÉÊH]K]XHÚXÝÈÝÈY]ÐÞH[HÛHÝÚÙOHÝ\[ÛÛÜÝÚÙK]ÚYHÝÚÙK[[XØ\HÝ[ÝÚÙK[[ZÚ[HÝ[]HLNXLKLLKLLXLHL[ÚXLHÏÜÝÏÚXÝÂØ]ÛÛ]KKH8¥d8¥d8¥dÓÓTÔÑHSÑS8¥d8¥d8¥dKO]Û\ÜÏH[Ù[[Ý\^HYHÛÛ\ÜÙS[Ù[]Û\ÜÏH[Ù[]Û\ÜÏH[Ù[]]H]È[XZ[]ÛÛ\ÜÏH[Ù[XÛÜÙHÛÛXÚÏHYPÛÛ\ÜÙJ
+H[Y\ÎÏØ]ÛÙ]]Û\ÜÏHÜKYY[X[Û\ÜÏHÜK[X[ÏÛX[[]Û\ÜÏHÜKZ[]YHÛÛ\ÜÙUÈXÙZÛ\H[XZ[^[\KÛÛHÙ]]Û\ÜÏHÜKYY[X[Û\ÜÏHÜK[X[ÝXXÝÛX[[]Û\ÜÏHÜKZ[]YHÛÛ\ÜÙTÝXXÝXÙZÛ\HÝXXÝÙ]]Û\ÜÏHÜKYY[X[Û\ÜÏHÜK[X[Y\ÜØYÙOÛX[^\XHÛ\ÜÏHÜKZ[]YHÛÛ\ÜÙPÙHXÙZÛ\HÜ]H[Ý\Y\ÜØYÙKÝ^\XOÙ]]Ý[OH\Ü^N^ÙØ\]ÛÛ\ÜÏHÜK\ÝXZ]Ý[OH^NØXÚÙÜÝ[\K\Ý\XÙLHÛÛXÚÏHY[XZ[
+
+HØ]HYØ]Û]ÛÛ\ÜÏHÜK\ÝXZ]Ý[OH^ÛÛXÚÏHÙ[[XZ[
+
+HÙ[Ø]ÛÙ]Ù]Ù]KKH8¥d8¥d8¥dSRSTSÑS8¥d8¥d8¥dKO]Û\ÜÏH[Ù[[Ý\^HYH[Z[\[Ù[]Û\ÜÏH[Ù[]Û\ÜÏH[Ù[]]H]È[Z[\]ÛÛ\ÜÏH[Ù[XÛÜÙHÛÛXÚÏHYT[Z[\[Ù[
+
+H[Y\ÎÏØ]ÛÙ]]Û\ÜÏHÜKYY[X[Û\ÜÏHÜK[X[Ú]È[ÝHYYÈ[Y[X\ÏÛX[[]Û\ÜÏHÜKZ[]YH[Z[\]HXÙZÛ\HKËØ[ÛXÝ]ËL\ÈÙ]]Û\ÜÏHÜKYY[X[Û\ÜÏHÜK[X[Ú[ÏÛX[[]Û\ÜÏHÜKZ[]YH[Z[\]H\OH]][YK[ØØ[Ù]]Û\ÜÏHÜKYY[X[Û\ÜÏHÜK[X[[Ü]OÛX[]Ý[OH\Ü^N^ÙØ\]ÛÛ\ÜÏHYÙHÝ[OHY[ÎMØÜ\ÛÛY\K\Y
+NØXÚÙÜÝ[[Ü\[ØÛÛÜ\K\Y
+NØÝ\ÛÜÚ[\ØÜ\\Y]\ÎLÛÛXÚÏHÙ][Z[\[Ü]J	ÚYÚ	Ë\ÊHYÚØ]Û]ÛÛ\ÜÏHYÙHÝ[OHY[ÎMØÜ\ÛÛY\KYÛÛ
+NØXÚÙÜÝ[[Ü\[ØÛÛÜ\KYÛÛ
+NØÝ\ÛÜÚ[\ØÜ\\Y]\ÎLÛÛXÚÏHÙ][Z[\[Ü]J	ÛYY][IË\ÊHYY][OØ]Û]ÛÛ\ÜÏHYÙHÝ[OHY[ÎMØÜ\ÛÛY\K]^ÊNØXÚÙÜÝ[[Ü\[ØÛÛÜ\K]^ÊNØÝ\ÛÜÚ[\ØÜ\\Y]\ÎLÛÛXÚÏHÙ][Z[\[Ü]J	ÛÝÉË\ÊHÝÏØ]ÛÙ]Ù]]Ý[OH\Ü^N^ÙØ\]ÛÛ\ÜÏHÜK\ÝXZ]Ý[OH^NØXÚÙÜÝ[\K\Ý\XÙLHÛÛXÚÏHYT[Z[\[Ù[
+
+HØ[Ù[Ø]Û]ÛÛ\ÜÏHÜK\ÝXZ]Ý[OH^ÛÛXÚÏHØ]T[Z[\
+HÙ][Z[\Ø]ÛÙ]Ù]Ù]KKH8¥d8¥d8¥dÑUSÔÈSÑS8¥d8¥d8¥dKO]Û\ÜÏH[Ù[[Ý\^HYHÙ][ÜÓ[Ù[]Û\ÜÏH[Ù[]Û\ÜÏH[Ù[]]HÙ][ÜÂ]ÛÛ\ÜÏH[Ù[XÛÜÙHÛÛXÚÏHYTÙ][ÜÊ
+H[Y\ÎÏØ]ÛÙ]]Û\ÜÏHÙ][ÜËZ][H]]Û\ÜÏHÙ][ÜË[X[Û]YHTHÙ^OÙ]]Û\ÜÏHÙ][ÜËY\ØÈÛHÛÛÛÛK[ÜXËÛÛOÙ]Ù][]Û\ÜÏHÙ][ÜËZ[]YH\RÙ^R[]\OH\ÜÝÛÜXÙZÛ\HÚËX[KÛ[]HØ]TÙ][ÜÊ
+HÙ]]Û\ÜÏHÙ][ÜËZ][H]]Û\ÜÏHÙ][ÜË[X[ÛH[X\Ù]]Û\ÜÏHÙ][ÜËY\ØÈÜ^[\È
+\^ÛOÙ]Ù][]Û\ÜÏHÙ][ÜËZ[]YHÛR[][YOHÌMLLÌÈÛ[]HØ]TÙ][ÜÊ
+HÙ]]Û\ÜÏHÙ][ÜËZ][H]]Û\ÜÏHÙ][ÜË[X[\ÚÝYXØ][ÛÏÙ]]Û\ÜÏHÙ][ÜËY\ØÈÙ][\ÈÛ[Ý\ÛOÙ]Ù]]ÛÛ\ÜÏHYÙHÝ[OHY[ÎMØXÚÙÜÝ[\KXXØÙ[
+NØÛÛÜÚ]NØÜ\ÛNØÜ\\Y]\ÎLØÝ\ÛÜÚ[\ÛÛXÚÏH\]Y\ÝÝY\Z\ÜÚ[Û
+H[XOØ]ÛÙ]Ù]Ù]Ù]ØÜ\ËÈ8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥dËÈÓÓQÈ	ÕUBËÈ8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥dÛÛÝTÕTÒSÓHKÂÛÛÝÕÔQÑWÒÑVTÈHÈÙ][ÜÎ]ÜÙ][ÜÈ[Z[\Î]Ü[Z[\ÈÚ]\ÝÜN]ØÚ]ÚXÝÎ]ÜÚXÝÈNÂ]Ý]HHÂÙ][ÜÎÈ\RÙ^NÛNÌMLLÌÈØ\Y\^ÛÛHK[Z[\Î×KÚ]\ÝÜN×KÝ\[[Z[\[Ü]NYY][HNÂËÈØYÛHÝÜYÙB[Ý[ÛØYÝ]J
+HÂHÂÛÛÝÈHØØ[ÝÜYÙKÙ]][JÕÔQÑWÒÑVTËÙ][ÜÊNÂY
+ÊHÝ]KÙ][ÜÈHÈÝ]KÙ][ÜËÓÓ\ÙJÊHNÂÛÛÝHØØ[ÝÜYÙKÙ]][JÕÔQÑWÒÑVTË[Z[\ÊNÂY
+HÝ]K[Z[\ÈHÓÓ\ÙJNÂÛÛÝÈHØØ[ÝÜYÙKÙ]][JÕÔQÑWÒÑVTËÚ]\ÝÜJNÂY
+ÊHÝ]KÚ]\ÝÜHHÓÓ\ÙJÊNÂHØ]Ú
+JHÈÛÛÛÛK\ÜØY\ÜJNÈBB[Ý[ÛØ]TÙ][ÜÊ
+HÂÝ]KÙ][ÜË\RÙ^HHØÝ[Y[Ù][[Y[RY
+\RÙ^R[]K[YNÂÝ]KÙ][ÜËÛHHØÝ[Y[Ù][[Y[RY
+ÛR[]K[YNÂØØ[ÝÜYÙKÙ]][JÕÔQÑWÒÑVTËÙ][ÜËÓÓÝ[ÚYJÝ]KÙ][ÜÊJNÂB[Ý[ÛØ]T[Z[\Ê
+HÂØØ[ÝÜYÙKÙ]][JÕÔQÑWÒÑVTË[Z[\ËÓÓÝ[ÚYJÝ]K[Z[\ÊJNÂB[Ý[ÛØ]PÚ]\ÝÜJ
+HÂØØ[ÝÜYÙKÙ]][JÕÔQÑWÒÑVTËÚ]\ÝÜKÓÓÝ[ÚYJÝ]KÚ]\ÝÜKÛXÙJML
+JJNÂBËÈ8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥dËÈUQÐUSÓËÈ8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d[Ý[ÛÝÚ]ÚXXHÂØÝ[Y[]Y\TÙ[XÝÜ[
+ØÜY[KÜXXÚ
+ÈOËÛ\ÜÓ\Ý[[ÝJXÝ]HJNÂØÝ[Y[]Y\TÙ[XÝÜ[
+]XKÜXXÚ
+OÛ\ÜÓ\Ý[[ÝJXÝ]HJNÂØÝ[Y[Ù][[Y[RY
+ØÜY[H
+ÈXKÛ\ÜÓ\ÝY
+XÝ]HNÂØÝ[Y[]Y\TÙ[XÝÜÙ]K]XHÝXHX
+KÛ\ÜÓ\ÝY
+XÝ]HNÂY
+XOOHÛYHHY\ÚÛYJ
+NÂY
+XOOH[XZ[HØY[XZ[Ê\Î[XYNÂY
+XOOH[Z[\ÈH[\[Z[\Ê
+NÂY
+XOOHÚXÝÈH[\ÚXÝÊ
+NÂY
+XOOHÚ]HÂÙ][Y[Ý]
+
+
+HOÂÛÛÝ\ÙÜÈHØÝ[Y[Ù][[Y[RY
+Ú]Y\ÜØYÙ\ÈNÂ\ÙÜËØÜÛÜH\ÙÜËØÜÛZYÚÂKL
+NÂBBËÈ8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥dËÈÓQHÐÔQSËÈ8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d[Ý[ÛY\ÚÛYJ
+HÂÛÛÝÝÈH]È]J
+NÂÛÛÝÝ\HÝËÙ]Ý\Ê
+NÂÛÛÝÜY]HÝ\LÈÛÛÙ[Ü[ÈÝ\MÈÈÛÛÙY\ÛÛÛÛÙ][[ÈÂØÝ[Y[Ù][[Y[RY
+ÜY][ÈK^ÛÛ[HÜY]
+È]ÂØÝ[Y[Ù][[Y[RY
+]Q\Ü^HK^ÛÛ[HÝËÓØØ[Q]TÝ[Ê[UTÈÈÙYZÙ^NÛÈ[ÛÛÈ^N[Y\XÈYX\[Y\XÈJNÂËÈ\]H[Z[\ÛÝ[ÛÛÝÙ^T[Z[\ÈHÝ]K[Z[\Ë[\O\ÛH	]È]J]JKÑ]TÝ[Ê
+HOOHÝËÑ]TÝ[Ê
+JNÂØÝ[Y[Ù][[Y[RY
+Ý][Z[\ÈK^ÛÛ[HÙ^T[Z[\Ë[ÝÂËÈ[\ÛYH[Z[\ÂÛÛÝÛYTHØÝ[Y[Ù][[Y[RY
+ÛYT[Z[\ÈNÂÛÛÝ\ÛÛZ[ÈHÝ]K[Z[\Ë[\O\ÛJKÛÜ
+
+KHO]È]JK]JHH]È]J]JJKÛXÙJÊNÂY
+\ÛÛZ[Ë[ÝOOH
+HÂÛYT[\SH	Ï]Û\ÜÏH[\K\Ý]HÈ\ÛÛZ[È[Z[\ÏÜÙ]ÎÂH[ÙHÂÛYT[\SH\ÛÛZ[ËX\
+O]Û\ÜÏH[Z[\Z][H]Û\ÜÏH[Z[\\[Ü]HÝ[OHXÚÙÜÝ[Ü[Ü]HOOH	ÚYÚ	ÈÈ	Ý\K\Y
+IÈ[Ü]HOOH	ÛYY][IÈÈ	Ý\KYÛÛ
+IÈ	Ý\K]^ÊIßHÙ]]Û\ÜÏH[Z[\]^]Û\ÜÏH[Z[\]]HÙ\ØÊ]J_OÙ]]Û\ÜÏH[Z[\][YHÙÜX]]J]J_OÙ]Ù]Ù]
+KÚ[NÂBBËÈ8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥dËÈÒUÒUÓUQBËÈ8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d\Þ[È[Ý[ÛÙ[Ú]
+
+HÂÛÛÝ[]HØÝ[Y[Ù][[Y[RY
+Ú][]NÂÛÛÝ\ÙÈH[][YK[J
+NÂY
+[\ÙÊH]\Â[][YHHÂ]]Ô\Ú^R[]
+[]
+NÂYÚ]Y\ÜØYÙJ\Ù\\ÙÊNÂY
+\Ý]KÙ][ÜË\RÙ^JHÂYÚ]Y\ÜØYÙJ\ÜÚ\Ý[ÈÚ]Ú]YH\XÝK[ÝIÛYYÈY[Ý\Û]YHTHÙ^H[Ù][ÜË\HÙX\XÛÛÜÛÈÈÙ][ÜÈÛ]YHTHÙ^K[ÝHØ[Ù]ÛH]ÛÛÛÛK[ÜXËÛÛH8 %]ZÙ\ÈXÝ]Z[]\ÈHNÂ]\ÂBËÈÚÝÈ\[È[XØ]ÜÛÛÝ\[ÈHØÝ[Y[ÜX]Q[[Y[
+]NÂ\[ËÛ\ÜÓ[YHH\ÙÈ\ÜÚ\Ý[Â\[Ë[\SH	Ï]Û\ÜÏH\[ËZ[XØ]ÜÜ[ÜÜ[Ü[ÜÜ[Ü[Ý[OHXÚÙÜÝ[ÎËÙÚ]XÛÛKÛ]ÛÛÜ\[XZÙ\Û]X\ÜÚ\Ý[Ý\ØYÛXZ[ÜÜ[Ù]ÎÂØÝ[Y[Ù][[Y[RY
+Ú]Y\ÜØYÙ\ÈK\[Ú[
+\[ÊNÂØÜÛÚ]
+
+NÂHÂÛÛÝY\ÜØYÙ\ÈHÝ]KÚ]\ÝÜKÛXÙJL
+KX\
+HO
+ÈÛNKÛKÛÛ[KÛÛ[JJNÂÛÛÝÞ\Ý[TÛ\H[ÝH\H]ÛÛÜ\ÜÈ\ÛÛ[RH\ÜÚ\Ý[[ÝHÛÝÈHÛÝÚ[ÈXÝ]]HH[ÈÐÒHØ\][
+[\ÝY[\K]ØÚKØ\][
+H[[[ZXÈÙ[Ù\XÙHHÙ^H[\ÝÜÎ[XHØ\ÜÛÛ
+\ÜÝÝÛØ\][
+KÛÚYÝK]ÜÚ\X[
+Õ\]Z]JKÙ][[ÜÙ[^H
+HØ\][
+K[H\XÚÚH
+Ü]Û[K[ÙH[\ÈHIÜÈ\ÙTÈ[X[ÙH
+[HXZIÜÈX[\Ý]H[\Ý[ÈÜÝ\
+HHHY\ÈÝØÚÜÈÛ[ÝX\
+ÖÕÔÑ
+HH\ÈÚYH\È[ÛHHIÜÈZ[[ÈÛØÚX[YYXH]]ÛX][ÛÜ[ÝYÜ[K[ÙY[XÙXÛÚÈHIÜÈZ]Y][8 %Z[H^Y\XHÝYKÚ\Ú[Û[Y[H[Y^ÛNÙ[[[YH
+[Y\XØKÐÚXØYÛÊHH[XZ[]ÛÛÜ\ÛXZ[ÛÛK]ØÚKØ\][][[ZXÝÙ[Ù\XÙKÛÛHHÛÛÚ\ÙKØ\K[XÝ[ÛXK[[HÚ]\ÚÜËZ[ÝÜK[YY\ÜØYÙ\È8 %Ú]]\HYYË[ÝIÜH\ÈYÚZ[RKÂÛÛÝ\ÜH]ØZ]]Ú
+Ø\KØÚ]ÂY]ÙÔÕXY\ÎÈÛÛ[U\H\XØ][ÛÚÛÛKÙNÓÓÝ[ÚYJÈY\ÜØYÙ\ËÞ\Ý[NÞ\Ý[TÛ\\RÙ^NÝ]KÙ][ÜË\RÙ^HJBJNÂ\[Ë[[ÝJ
+NÂY
+\\ÜÚÊHÂÛÛÝ\H]ØZ]\Ü^
+
+NÂYÚ]Y\ÜØYÙJ\ÜÚ\Ý[ÛÛY][ÈÙ[ÜÛÈ8 %
+È\
+ÈÚXÚÈ[Ý\THÙ^H[Ù][ÜËNÂ]\ÂBÛÛÝ]HH]ØZ]\ÜÛÛ
+NÂYÚ]Y\ÜØYÙJ\ÜÚ\Ý[]KÛÛ[
+NÂHØ]Ú
+JHÂ\[Ë[[ÝJ
+NÂYÚ]Y\ÜØYÙJ\ÜÚ\Ý[ÛÛXÝ[Û\ÜXZÙHÝ\HH\\ÈÛ[H[[Ý\THÙ^H\ÈÙ]ÛÜXÝKNÂBB[Ý[ÛYÚ]Y\ÜØYÙJÛKÛÛ[
+HÂÛÛÝÛÛZ[\HØÝ[Y[Ù][[Y[RY
+Ú]Y\ÜØYÙ\ÈNÂÛÛÝ]HØÝ[Y[ÜX]Q[[Y[
+]NÂ]Û\ÜÓ[YHH\ÙÈ
+ÈÛNÂ]^ÛÛ[HÛÛ[ÂÛÛZ[\\[Ú[
+]NÂØÜÛÚ]
+
+NÂÝ]KÚ]\ÝÜK\Ú
+ÈÛKÛÛ[[Y\Ý[\]KÝÊ
+HJNÂØ]PÚ]\ÝÜJ
+NÂB[Ý[ÛØÜÛÚ]
+
+HÂÛÛÝÈHØÝ[Y[Ù][[Y[RY
+Ú]Y\ÜØYÙ\ÈNÂÙ][Y[Ý]
+
+
+HOËØÜÛÜHËØÜÛZYÚL
+NÂB[Ý[Û]]Ô\Ú^R[]
+[
+HÂ[Ý[KZYÚH]]ÈÂ[Ý[KZYÚHX]Z[[Ý[ÛL
+H
+ÈÂBØÝ[Y[Y][\Ý[\ÓPÛÛ[ØYY
+
+HOÂÛÛÝÚHHØÝ[Y[Ù][[Y[RY
+Ú][]NÂÚKY][\Ý[\[]
+
+HO]]Ô\Ú^R[]
+ÚJJNÂJNÂËÈ8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥dËÈSPRSËÈ8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d][XZ[ØXÚHHßNÂ\Þ[È[Ý[ÛØY[XZ[Ê]Y\JHÂÛÛÝ\ÝHØÝ[Y[Ù][[Y[RY
+[XZ[\ÝNÂ\Ý[\SH	Ï]Û\ÜÏH[\K\Ý]HØY[È[XZ[ËÜÙ]ÎÂËÈYÈTHÛÛXÝYY]ÚÝÈÙ]\Y\ÜØYÙBY
+\Ý]KÙ][ÜË\RÙ^JHÂ\Ý[\SH]Û\ÜÏH[\K\Ý]H]Û\ÜÏH[[ÚH¼'äéÏÙ][XZ[[YÜ][ÛÛÛZ[ÈÛÛÛOÜÝË[Ý\Z[HYY[È[[[ÙY^HXØ\È\H[]\YÈ[Ý\ÛXZ[YÈ]]ÛX]XØ[HXHÛ]YHØÚY[Y\ÚÜËÜÙ]Â]\ÂBËÈ\ÙHÛ]YHÈ]Ú[Ý[[X\^H[XZ[ÂHÂÛÛÝ\ÜH]ØZ]]Ú
+Ø\KØÚ]ÂY]ÙÔÕXY\ÎÈÛÛ[U\H\XØ][ÛÚÛÛKÙNÓÓÝ[ÚYJÂY\ÜØYÙ\ÎÞÈÛN\Ù\ÛÛ[ÙX\Ú^HÛXZ[ÜÜ]Y\_H[]\HL[ÜÝXÙ[\Ý[È\ÈÓÓ\^HÚ]Y[ÎÛKÝXXÝÛ\]]K[XY
+ÛÛX[K]\ÓHHÓÓ\^KÈ^[][ÛWKÞ\Ý[N[ÝH\H[[XZ[\ÜÚ\Ý[]\ÛH[YÓÓ\RÙ^NÝ]KÙ][ÜË\RÙ^BJBJNÂËÈÜÝÈÚÝÈXÙZÛ\ÚÝÑ[XZ[XÙZÛ\\Ý]Y\JNÂHØ]Ú
+JHÂÚÝÑ[XZ[XÙZÛ\\Ý]Y\JNÂBB[Ý[ÛÚÝÑ[XZ[XÙZÛ\\Ý]Y\JHÂ\Ý[\SH]Û\ÜÏH[\K\Ý]H]Û\ÜÏH[[ÚH¼'äêÙ][XZ[Y]ÈÚ[ÛÛXÝÈ[Ý\ÛXZ[[Ý\]]ÛX]YYY[ÜÈ\H[[È[HXÚÙÜÝ[OÜÙ]ÂB[Ý[ÛÚÝÐÛÛ\ÜÙJ
+HÈØÝ[Y[Ù][[Y[RY
+ÛÛ\ÜÙS[Ù[KÛ\ÜÓ\ÝY
+ÚÝÈNÈB[Ý[ÛYPÛÛ\ÜÙJ
+HÈØÝ[Y[Ù][[Y[RY
+ÛÛ\ÜÙS[Ù[KÛ\ÜÓ\Ý[[ÝJÚÝÈNÈB\Þ[È[Ý[ÛÙ[[XZ[
+
+HÂÛÛÝÈHØÝ[Y[Ù][[Y[RY
+ÛÛ\ÜÙUÈK[YNÂÛÛÝÝXXÝHØÝ[Y[Ù][[Y[RY
+ÛÛ\ÜÙTÝXXÝK[YNÂÛÛÝÙHHØÝ[Y[Ù][[Y[RY
+ÛÛ\ÜÙPÙHK[YNÂY
+]ÈXÙJHÈÚÝÓÝYX\ÙH[[XÚ\Y[[Y\ÜØYÙHNÈ]\ÈBÚÝÓÝY[XZ[]Y]YYH
+Ú[HÙ[XH[Ý\^Û]YHÙ\ÜÚ[ÛHNÂYPÛÛ\ÜÙJ
+NÂËÈÛX\ÜBØÝ[Y[Ù][[Y[RY
+ÛÛ\ÜÙUÈK[YHHÂØÝ[Y[Ù][[Y[RY
+ÛÛ\ÜÙTÝXXÝK[YHHÂØÝ[Y[Ù][[Y[RY
+ÛÛ\ÜÙPÙHK[YHHÂB\Þ[È[Ý[ÛY[XZ[
+
+HÂÚÝÓÝYYØ]YHNÂYPÛÛ\ÜÙJ
+NÂBËÈ8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥dËÈSRSTÂËÈ8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d[Ý[ÛY[Z[\
+HÂÛÛÝ[]HØÝ[Y[Ù][[Y[RY
+[Z[\[]NÂÛÛÝ^H[][YK[J
+NÂY
+]^
+H]\ÂËÈ\ÙH]\[[ÝXYÙH[YBÛÛÝ\ÙYH\ÙT[Z[\^
+^
+NÂÝ]K[Z[\Ë\Ú
+ÂY]KÝÊ
+K]N\ÙY]K]N\ÙY]KÒTÓÔÝ[Ê
+K[Ü]NYY][HÛN[ÙKÝYYY[ÙKJNÂØ]T[Z[\Ê
+NÂ[\[Z[\Ê
+NÂY\ÚÛYJ
+NÂ[][YHHÂÚÝÓÝY[Z[\Ù]
+È\ÙY]JNÂËÈØÚY[HÝYXØ][ÛØÚY[SÝYXØ][Û\ÙY]K\ÙY]JNÂB[Ý[Û\ÙT[Z[\^
+^
+HÂÛÛÝÝÈH]È]J
+NÂ]]HH]È]JÝËÙ][YJ
+H
+ÈÌ
+
+L
+NÈËÈY][ÌZ[]]HH^ÂËÈ\ÙH]KØ[HÛÛÝ][YSX]ÚH^X]Ú
+×]ÊÊÌKJJÎÌJJO×Ê[_JOËÚJNÂY
+][YSX]Ú
+HÂ]H\ÙR[
+][YSX]ÚÌWJNÂÛÛÝHH][YSX]ÚÌHÈ\ÙR[
+][YSX]ÚÌJHÂÛÛÝ[\HH][YSX]ÚÌ×NÂY
+[\H	[\KÓÝÙ\Ø\ÙJ
+HOOHH	LH
+ÏHLÂY
+[\H	[\KÓÝÙ\Ø\ÙJ
+HOOH[H	OOHLHHÂ]HH]È]JÝÊNÂ]KÙ]Ý\ÊK
+NÂY
+]HHÝÊH]KÙ]]J]KÙ]]J
+H
+ÈJNÂ]HH^\XÙJ×]Ê×ÌKJÎÌJO×ÊÎ[_JOËÚKK[J
+NÂBËÈ\ÙH[Z[]\ËÚÝ\ÈÛÛÝ[X]ÚH^X]Ú
+×[ÊÊ
+ÊWÊZ[Î]JOÜÏßÏßÝ\ÏÊKÚJNÂY
+[X]Ú
+HÂÛÛÝ[HH\ÙR[
+[X]ÚÌWJNÂÛÛÝ[]H[X]ÚÌKÓÝÙ\Ø\ÙJ
+NÂY
+[]Ý\ÕÚ]
+Z[JHÂ]HH]È]JÝËÙ][YJ
+H
+È[H
+
+L
+NÂH[ÙHÂ]HH]È]JÝËÙ][YJ
+H
+È[H
+
+
+L
+NÂB]HH^\XÙJ×[Ê×
+×ÊÎZ[Î]JOÜÏßÏßÝ\ÏÊKÚKK[J
+NÂBËÈ\ÙHÛ[ÜÝÈY
+×Û[ÜÝ×ÚK\Ý
+^
+JHÂ]HH]È]JÝÊNÂ]KÙ]]J]KÙ]]J
+H
+ÈJNÂ]KÙ]Ý\ÊK
+NÂ]HH^\XÙJ×Û[ÜÝ×ÚKK[J
+NÂBËÈÛX[\]B]HH]K\XÙJ×Ëx $ø %×JËËK\XÙJÖËx $ø %×JÉËNÂY
+]]JH]HH^Â]\È]K]HNÂB[Ý[Û[\[Z[\Ê
+HÂÛÛÝ\ÝHØÝ[Y[Ù][[Y[RY
+[Z[\Ó\ÝNÂÛÛÝXÝ]HHÝ]K[Z[\Ë[\O\ÛJKÛÜ
+
+KHO]È]JK]JHH]È]J]JJNÂÛÛÝÛHHÝ]K[Z[\Ë[\OÛJKÛÜ
+
+KHO]È]J]JHH]È]JK]JJKÛXÙJJNÂY
+XÝ]K[ÝOOH	ÛK[ÝOOH
+HÂ\Ý[\SH]Û\ÜÏH[\K\Ý]H]Û\ÜÏH[[ÚH¸£ìÙ]È[Z[\ÈY]\HÛÛY][ÈZÙHØ[Û]ÜHXÝHOÜÙ]Â]\ÂB][HXÝ]KX\
+O]Û\ÜÏH[Z[\Z][H]Û\ÜÏH[Z[\XÚXÚÈÛÛXÚÏHÙÙÛT[Z[\	ÜYJHÙ]]Û\ÜÏH[Z[\]^]Û\ÜÏH[Z[\]]HÙ\ØÊ]J_OÙ]]Û\ÜÏH[Z[\][YHÙÜX]]J]J_OÙ]Ù]]Û\ÜÏH[Z[\\[Ü]HÝ[OHXÚÙÜÝ[Ü[Ü]HOOH	ÚYÚ	ÈÈ	Ý\K\Y
+IÈ[Ü]HOOH	ÛYY][IÈÈ	Ý\KYÛÛ
+IÈ	Ý\K]^ÊIßHÙ]Ù]
+KÚ[NÂY
+ÛK[Ý
+HÂ[
+ÏH	Ï]Ý[OHX\Ú[]ÜMÛX\Ú[XÝÛNÙÛ\Ú^NLÙÛ]ÙZYÚØÛÛÜ\K]^ÊNÝ^][ÙÜN\\Ø\ÙNÛ]\\ÜXÚ[Î\ÛÛ\]YÙ]ÎÂ[
+ÏHÛKX\
+O]Û\ÜÏH[Z[\Z][HÝ[OHÜXÚ]N]Û\ÜÏH[Z[\XÚXÚÈÛHÛÛXÚÏHÙÙÛT[Z[\	ÜYJH¸§$ÏÙ]]Û\ÜÏH[Z[\]^]Û\ÜÏH[Z[\]]HÝ[OH^YXÛÜ][Û[K]ÝYÚÙ\ØÊ]J_OÙ]]Û\ÜÏH[Z[\][YHÙÜX]]J]J_OÙ]Ù]Ù]
+KÚ[NÂB\Ý[\SH[ÂB[Ý[ÛÙÙÛT[Z[\Y
+HÂÛÛÝHÝ]K[Z[\Ë[
+OYOOHY
+NÂY
+HÈÛHH\ÛNÈØ]T[Z[\Ê
+NÈ[\[Z[\Ê
+NÈY\ÚÛYJ
+NÈBB[Ý[ÛÙ][Z[\[Ü]J[
+HÂÝ]KÝ\[[Z[\[Ü]HHÂ[\[[[Y[]Y\TÙ[XÝÜ[
+]ÛKÜXXÚ
+OÝ[KXÚÙÜÝ[H[Ü\[NÂÛÛÝÛÛÜÈHÈYÚ\K\Y
+HYY][N\KYÛÛ
+HÝÎ\K]^ÊHNÂ[Ý[KXÚÙÜÝ[HÛÛÜÖÜNÂ[Ý[KÛÛÜHÚ]HÂB[Ý[ÛØÚY[SÝYXØ][Û]K]JHÂÛÛÝ[^HH]KÙ][YJ
+HH]KÝÊ
+NÂY
+[^H	[^H
+HÈËÈÚ][Ý\ÂÙ][Y[Ý]
+
+
+HOÂY
+ÝYXØ][Û[Ú[ÝÈ	ÝYXØ][Û\Z\ÜÚ[ÛOOHÜ[YHÂ]ÈÝYXØ][Û¸£ì[Z[\ÈÙN]KXÛÛÚXÛÛLNLÈYÙNÚXÛÛLNLÈX]NÌLHJNÂBÚÝÓÝY¸£ì
+È]JNÂK[^JNÂBBËÈ8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d
+    // PROJECTS
+    // ââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+    const projects = [
+      {
+        name: "CCI Capital", emoji: "ð¬", color: "var(--gold)", status: "Active", statusBg: "rgba(245,158, 11,0.15)",
+        desc: "Investment firm â investor relations, K-1 distribution, deal sourcing",
+        tasks: [
+          { text: "Send K-1s to all investors", priority: "high" },
+          { text: "Follow up on WIC03 Summary feedback", priority: "medium" },
+          { text: "Prep for HERO Alliance session", priority: "low" },
+        ],
+        progress: 45,
+      },
+      {
+        name: "Dynamic Well Service", emoji: "âï¸", color: "var(--accent)", status: "In Progress", statusBg: "rgba(59,130,246,0.15)",
+        desc: "DWS Ops Board â PWA with vanilla JS & Supabase",
+        tasks: [
+          { text: "Fix app issues and errors", priority: "high" },
+          { text: "Test Supabase integration", priority: "medium" },
+        ],
+        progress: 30,
+      },
+      {
+        name: "Stock Portfolio", emoji: "ð", color: "var(--green)", status: "Active", statusBg: "rgba(16,185,129,0.15)",
+        desc: "Trading on Vanguard â OX[, CVX, CRWD positions",
+        tasks: [
+          { text: "Morning & evening briefings (automated)", priority: "low" },
+          { text: "Review portfolio allocation", priority: "medium" },
+        ],
+        progress: 70,
+      },
+      {
+        name: "Social Media Automation", emoji: "ð¬", color: "var(--pink)", status: "Building", statusBg: "rgba(236,72,153,0.15)",
+        desc: "Auto video creation & posting â IG, LinkedIn, Facebook",
+        tasks: [
+          { text: "Complete Graph API permissions setup", priority: "high" },
+          { text: "Build content posting pipeline", priority: "medium" },
+          { text: "Create video templates", priority: "low" },
+        ],
+        progress: 20,
+      },
+    ];
+
+    function renderProjects() {
+      const list = document.getElementById("projectsList");
+      list.innerHTML = projects.map(p => `
+        <div class="project-card">
+          <div class="project-header">
+            <div class="project-icon" style="background:${p.statusBg}">${p.emoji}</div>
+            <div class="project-name">${p.name}</div>
+            <span class="project-status" style="background:${p.statusBg};color:${p.color}">${p.status}</span>
+          </div>
+          <div class="project-desc">${p.desc}</div>
+          <div class="progress-bar"><div class="progress-fill" style="width:${p.progress}%;background:${p.color}"></div></div>
+          <div class="project-tasks">
+            ${p.tasks.map(t => `
+              <div class="project-task">
+                <div class="pdot" style="background:${t.priority === 'high' ? 'var(--red)' : t.priority === 'medium' ? 'var(--gold)' : 'var(--text3)'}"></div>
+                ${esc(t.text)}
+              </div>
+            `).join("")}
+          </div>
+        </div>
+      `).join("");
+    }
+
+    // ââââââââââââââââââââââââââââââââââââââââââââââââââââââ(¼¼9=Q%%Q%=9L(¼¼VCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCV@(Õ¹Ñ¥½¸ÉÅÕÍÑ9½Ñ¥AÉµ¥ÍÍ¥½¸ ¤ì(¥ 9½Ñ¥¥Ñ¥½¸¥¸Ý¥¹½Ü¤ì(9½Ñ¥¥Ñ¥½¸¹ÉÅÕÍÑAÉµ¥ÍÍ¥½¸ ¤¹Ñ¡¸¡Àôøì(¥¡ÀôôôÉ¹Ñ¤ì(Í¡½Ý9½Ñ¥ 9½Ñ¥¥Ñ¥½¹Ì¹±¤ì(¹Ü9½Ñ¥¥Ñ¥½¸ 1ØÍÍ¥ÍÑ¹Ð°ì½äèe½Ô±°¹½ÜÉ¥ÙÉµ¥¹È±ÉÑÌ½¸å½ÕÈÁ¡½¹°¥½¸è½¥½¸´ÄäÈ¹Á¹ô¤ì(ô(ô¤ì(ô(ô((Õ¹Ñ¥½¸Í¡½Ý9½Ñ¥¡ÑáÐ¤ì(½¹ÍÐ¹¹Èô½Õµ¹Ð¹Ñ±µ¹Ñ	å% ¹½Ñ¥	¹¹È¤ì(¹¹È¹ÑáÑ½¹Ñ¹ÐôÑáÐì(¹¹È¹±ÍÍ1¥ÍÐ¹ Í¡½Ü¤ì(ÍÑQ¥µ½ÕÐ  ¤ôø¹¹È¹±ÍÍ1¥ÍÐ¹Éµ½Ù Í¡½Ü¤°ÌÀÀÀ¤ì(ô((¼¼¡¬Éµ¥¹ÉÌÙÉäµ¥¹ÕÑ(Õ¹Ñ¥½¸¡­Iµ¥¹ÉÌ ¤ì(½¹ÍÐ¹½ÜôÑ¹¹½Ü ¤ì(ÍÑÑ¹Éµ¥¹ÉÌ¹½É ¡Èôøì(¥ È¹½¹È¹¹½Ñ¥¥¹ÜÑ¡È¹Ñ¤¹ÑQ¥µ ¤ðô¹½Ü¤ì(È¹¹½Ñ¥¥ôÑÉÕì(ÍÙIµ¥¹ÉÌ ¤ì(Í¡½Ý9½Ñ¥ >À¬È¹Ñ¥Ñ±¤ì(¥ 9½Ñ¥¥Ñ¥½¸¥¸Ý¥¹½Ü9½Ñ¥¥Ñ¥½¸¹ÁÉµ¥ÍÍ¥½¸ôôôÉ¹Ñ¤ì(¹Ü9½Ñ¥¥Ñ¥½¸ >ÀIµ¥¹È°ì½äèÈ¹Ñ¥Ñ±°¥½¸è½¥½¸´ÄäÈ¹Á¹°Ù¥ÉÑèlÈÀÀ°ÄÀÀ°ÈÀÁtô¤ì(ô(ô(ô¤ì(ô(ÍÑ%¹ÑÉÙ°¡¡­Iµ¥¹ÉÌ°ÌÀÀÀÀ¤ì((¼¼VCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCV@(¼¼UQ%1%Q%L(¼¼VCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCV@¢gVæ7FöâW622²6öç7BBÒFö7VÖVçBæ7&VFTVÆVÖVçB&Fb"²BçFWD6öçFVçBÒ3²&WGW&âBæææW$DÔÃ²Ð ¢gVæ7Föâf÷&ÖDFFR6ò°¢6öç7BBÒæWrFFR6ò°¢6öç7Bæ÷rÒæWrFFR°¢6öç7BFöFÒæ÷rçFôFFU7G&ærÓÓÒBçFôFFU7G&ær°¢6öç7BFöÖ÷'&÷rÒæWrFFRæ÷rævWEFÖR²cCçFôFFU7G&ærÓÓÒBçFôFFU7G&ær° ¢6öç7BFÖRÒBçFôÆö6ÆUFÖU7G&ær&VâÕU2"Â²÷W#¢&çVÖW&2"ÂÖçWFS¢#"ÖFvB"Â÷W##¢G'VRÒ°¢bFöF&WGW&â%FöFB"²FÖS°¢bFöÖ÷'&÷r&WGW&â%FöÖ÷'&÷rB"²FÖS°¢&WGW&âBçFôÆö6ÆTFFU7G&ær&VâÕU2"Â²ÖöçF¢'6÷'B"ÂF¢&çVÖW&2"Ò²"B"²FÖS°¢Ð ¢gVæ7Föâ6÷u6WGFæw2°¢Fö7VÖVçBævWDVÆVÖVçD'B'6WGFæw4ÖöFÂ"æ6Æ74Æ7BæFB'6÷r"°¢Fö7VÖVçBævWDVÆVÖVçD'B&¶WçWB"çfÇVRÒ7FFRç6WGFæw2æ¶WÇÂ"#°¢Fö7VÖVçBævWDVÆVÖVçD'B'öæTçWB"çfÇVRÒ7FFRç6WGFæw2çöæRÇÂ"#°¢Ð¢gVæ7FöâFU6WGFæw2²Fö7VÖVçBævWDVÆVÖVçD'B'6WGFæw4ÖöFÂ"æ6Æ74Æ7Bç&VÖ÷fR'6÷r"²Ð¢gVæ7Föâ6÷u&VÖæFW$ÖöFÂ²Fö7VÖVçBævWDVÆVÖVçD'B'&VÖæFW$ÖöFÂ"æ6Æ74Æ7BæFB'6÷r"²Ð¢gVæ7FöâFU&VÖæFW$ÖöFÂ²Fö7VÖVçBævWDVÆVÖVçD'B'&VÖæFW$ÖöFÂ"æ6Æ74Æ7Bç&VÖ÷fR'6÷r"²Ð ¢òò)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y ¢òò4U%d4Rtõ$´U"bt¢òò)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y ¢b'6W'f6Uv÷&¶W""âæfvF÷"°¢æfvF÷"ç6W'f6Uv÷&¶W"ç&Vv7FW""÷7ræ§2"çFVâ"Óâ°¢6öç6öÆRæÆör%5r&Vv7FW&VC¢"Â"ç66÷R°¢Òæ6F6RÓâ6öç6öÆRæÆör%5rW'&÷#¢"ÂR°¢Ð ¢òò)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)YËÈSUËÈ8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥dØYÝ]J
+NÂY\ÚÛYJ
+NÂ[\[Z[\Ê
+NÂ[\ÚXÝÊ
+NÂËÈ\ÝÜHÚ]\ÝÜBY
+Ý]KÚ]\ÝÜK[Ý
+HÂÛÛÝÛÛZ[\HØÝ[Y[Ù][[Y[RY
+Ú]Y\ÜØYÙ\ÈNÂÝ]KÚ]\ÝÜKÜXXÚ
+HOÂÛÛÝ]HØÝ[Y[ÜX]Q[[Y[
+]NÂ]Û\ÜÓ[YHH\ÙÈ
+ÈKÛNÂ]^ÛÛ[HKÛÛ[ÂÛÛZ[\\[Ú[
+]NÂJNÂBËÈØÚY[H^\Ý[È[Z[\ÂÝ]K[Z[\Ë[\O\ÛH	\ÝYYY
+KÜXXÚ
+OÂØÚY[SÝYXØ][Û]K]È]J]JJNÂJNÂÛÛÛÛKÙÊ]\ÜÚ\Ý[
+ÈTÕTÒSÓ
+È[]X[^YNÂÜØÜ\R"À¢FW63¢$çfW7FÖVçBf&Ò(	BçfW7F÷"&VÆFöç2Â²ÓF7G&'WFöâÂFVÂ6÷W&6ær"À¢F6·3¢°¢²FWC¢%6VæB²Ó2FòÆÂçfW7F÷'2"Â&÷&G¢&v"ÒÀ¢²FWC¢$föÆÆ÷rWöât327VÖÖ'fVVF&6²"Â&÷&G¢&ÖVFVÒ"ÒÀ¢²FWC¢%&Wf÷"U$òÆÆæ6R6W76öâ"Â&÷&G¢&Æ÷r"ÒÀ¢ÒÀ¢&öw&W73¢CRÀ¢ÒÀ¢°¢æÖS¢$GæÖ2vVÆÂ6W'f6R"ÂVÖö¦¢.)©ûò"Â6öÆ÷#¢'f"ÒÖ66VçB"Â7FGW3¢$â&öw&W72"Â7FGW4&s¢'&v&SÃ3Ã#CbÃãR"À¢FW63¢$Eu2÷2&ö&B(	BtvFfæÆÆ¥2b7W&6R"À¢F6·3¢°¢²FWC¢$f77VW2æBW'&÷'2"Â&÷&G¢&v"ÒÀ¢²FWC¢%FW7B7W&6RçFVw&Föâ"Â&÷&G¢&ÖVFVÒ"ÒÀ¢ÒÀ¢&öw&W73¢3À¢ÒÀ¢°¢æÖS¢%7Fö6²÷'FföÆò"ÂVÖö¦¢/	ù8"Â6öÆ÷#¢'f"ÒÖw&VVâ"Â7FGW3¢$7FfR"Â7FGW4&s¢'&v&bÃRÃ#ÃãR"À¢FW63¢%G&FæröâfæwV&B(	Bõ²Â5eÂ5%tB÷6Föç2"À¢F6·3¢°¢²FWC¢$Ö÷&æærbWfVæær'&Vfæw2WFöÖFVB"Â&÷&G¢&Æ÷r"ÒÀ¢²FWC¢%&WfWr÷'FföÆòÆÆö6Föâ"Â&÷&G¢&ÖVFVÒ"ÒÀ¢ÒÀ¢&öw&W73¢sÀ¢ÒÀ¢°¢æÖS¢%6ö6ÂÖVFWFöÖFöâ"ÂVÖö¦¢/	øêÂ"Â6öÆ÷#¢'f"Ò×æ²"Â7FGW3¢$'VÆFær"Â7FGW4&s¢'&v&#3bÃs"ÃS2ÃãR"À¢FW63¢$WFòfFVò7&VFöâb÷7Fær(	BrÂÆæ¶VDâÂf6V&öö²"À¢F6·3¢°¢²FWC¢$6ö×ÆWFRw&W&Ö76öç26WGW"Â&÷&G¢&v"ÒÀ¢²FWC¢$'VÆB6öçFVçB÷7FærVÆæR"Â&÷&G¢&ÖVFVÒ"ÒÀ¢²FWC¢$7&VFRfFVòFV×ÆFW2"Â&÷&G¢&Æ÷r"ÒÀ¢ÒÀ¢&öw&W73¢#À¢ÒÀ¢Ó° ¢gVæ7Föâ&VæFW%&ö¦V7G2°¢6öç7BÆ7BÒFö7VÖVçBævWDVÆVÖVçD'B'&ö¦V7G4Æ7B"°¢Æ7BæææW$DÔÂÒ&ö¦V7G2æÖÓâ ¢ÆFb6Æ73Ò'&ö¦V7BÖ6&B#à¢ÆFb6Æ73Ò'&ö¦V7BÖVFW"#à¢ÆFb6Æ73Ò'&ö¦V7BÖ6öâ"7GÆSÒ&&6¶w&÷VæC¢G·ç7FGW4&wÒ#âG·æVÖö¦ÓÂöFcà¢ÆFb6Æ73Ò'&ö¦V7BÖæÖR#âG·ææÖWÓÂöFcà¢Ç7â6Æ73Ò'&ö¦V7B×7FGW2"7GÆSÒ&&6¶w&÷VæC¢G·ç7FGW4&wÓ¶6öÆ÷#¢G·æ6öÆ÷'Ò#âG·ç7FGW7ÓÂ÷7ãà¢ÂöFcà¢ÆFb6Æ73Ò'&ö¦V7BÖFW62#âG·æFW67ÓÂöFcà¢ÆFb6Æ73Ò'&öw&W72Ö&"#ãÆFb6Æ73Ò'&öw&W72ÖfÆÂ"7GÆSÒ'vGF¢G·ç&öw&W77ÒS¶&6¶w&÷VæC¢G·æ6öÆ÷'Ò#ãÂöFcãÂöFcà¢ÆFb6Æ73Ò'&ö¦V7B×F6·2#à¢G·çF6·2æÖBÓâ ¢ÆFb6Æ73Ò'&ö¦V7B×F6²#à¢ÆFb6Æ73Ò'F÷B"7GÆSÒ&&6¶w&÷VæC¢G·Bç&÷&GÓÓÒvvròwf"Ò×&VBr¢Bç&÷&GÓÓÒvÖVFVÒròwf"ÒÖvöÆBr¢wf"Ò×FWC2wÒ#ãÂöFcà¢G¶W62BçFWBÐ¢ÂöFcà¢æ¦öâ""Ð¢ÂöFcà¢ÂöFcà¢æ¦öâ""°¢Ð ¢òò)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)YËÈÕQPÐUSÓÂËÈ8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d[Ý[Û\]Y\ÝÝY\Z\ÜÚ[Û
+HÂY
+ÝYXØ][Û[Ú[ÝÊHÂÝYXØ][Û\]Y\Ý\Z\ÜÚ[Û
+K[OÂY
+OOHÜ[YHÂÚÝÓÝYÝYXØ][ÛÈ[XYHNÂ]ÈÝYXØ][Û]\ÜÚ\Ý[ÈÙN[ÝIÛÝÈXÙZ]H[Z[\[\ÈÛ[Ý\ÛHHXÛÛÚXÛÛLNLÈJNÂBJNÂBB[Ý[ÛÚÝÓÝY^
+HÂÛÛÝ[\HØÝ[Y[Ù][[Y[RY
+ÝY[\NÂ[\^ÛÛ[H^Â[\Û\ÜÓ\ÝY
+ÚÝÈNÂÙ][Y[Ý]
+
+
+HO[\Û\ÜÓ\Ý[[ÝJÚÝÈKÌ
+NÂBËÈÚXÚÈ[Z[\È]\HZ[]B[Ý[ÛÚXÚÔ[Z[\Ê
+HÂÛÛÝÝÈH]KÝÊ
+NÂÝ]K[Z[\ËÜXXÚ
+OÂY
+\ÛH	\ÝYYY	]È]J]JKÙ][YJ
+HHÝÊHÂÝYYYHYNÂØ]T[Z[\Ê
+NÂÚÝÓÝY¸£ì
+È]JNÂY
+ÝYXØ][Û[Ú[ÝÈ	ÝYXØ][Û\Z\ÜÚ[ÛOOHÜ[YHÂ]ÈÝYXØ][Û¸£ì[Z[\ÈÙN]KXÛÛÚXÛÛLNLÈX]NÌLHJNÂBBJNÂBÙ][\[
+ÚXÚÔ[Z[\ËÌ
+NÂËÈ8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥dËÈUSUQTÂËÈ8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d
+    function esc(s) { const d = document.createElement("div"); d.textContent = s; return d.innerHTML; }
+
+    function formatDate(iso) {
+      const d = new Date(iso);
+      const now = new Date();
+      const today = now.toDateString() === d.toDateString();
+      const tomorrow = new Date(now.getTime() + 86400000).toDateString() === d.toDateString();
+
+      const time = d.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", hour12: true });
+      if (today) return "Today at " + time;
+      if (tomorrow) return "Tomorrow at " + time;
+      return d.toLocaleDateString("en-US", { month: "short", day: "numeric" }) + " at " + time;
+    }
+
+    function showSettings() {
+      document.getElementById("settingsModal").classList.add("show");
+      document.getElementById("apiKeyInput").value = state.settings.apiKey || "";
+      document.getElementById("phoneInput").value = state.settings.phone || "";
+    }
+    function hideSettings() { document.getElementById("settingsModal").classList.remove("show"); }
+    function showReminderModal() { document.getElementById("reminderModal").classList.add("show"); }
+    function hideReminderModal() { document.getElementById("reminderModal").classList.remove("show"); }
+
+    // ââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+    // SERVICE WORKER & PWA
+    // ââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("/sw.js").then(r => {
+        console.log("SW registered:", r.scope);
+      }).catch(e => console.log("SW error:", e));
+    }
+
+    // ââââââââââââââââââââââââââââââââââââââââââââââââââââââ(¼¼%9%P(¼¼VCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCV@(±½MÑÑ ¤ì(ÉÉÍ¡!½µ ¤ì(É¹ÉIµ¥¹ÉÌ ¤ì(É¹ÉAÉ½©ÑÌ ¤ì((¼¼IÍÑ½É¡Ð¡¥ÍÑ½Éä(¥¡ÍÑÑ¹¡Ñ!¥ÍÑ½Éä¹±¹Ñ øÀ¤ì(½¹ÍÐ½¹Ñ¥¹Èô½Õµ¹Ð¹Ñ±µ¹Ñ	å% ¡Ñ5ÍÍÌ¤ì(ÍÑÑ¹¡Ñ!¥ÍÑ½Éä¹½É ¡´ôøì(½¹ÍÐ¥Øô½Õµ¹Ð¹ÉÑ±µ¹Ð ¥Ø¤ì(¥Ø¹±ÍÍ9µôµÍ¬´¹É½±ì(¥Ø¹ÑáÑ½¹Ñ¹Ðô´¹½¹Ñ¹Ðì(½¹Ñ¥¹È¹ÁÁ¹¡¥±¡¥Ø¤ì(ô¤ì(ô((¼¼M¡Õ±á¥ÍÑ¥¹Éµ¥¹ÉÌ(ÍÑÑ¹Éµ¥¹ÉÌ¹¥±ÑÈ¡ÈôøÈ¹½¹È¹¹½Ñ¥¥¤¹½É ¡Èôøì(Í¡Õ±9½Ñ¥¥Ñ¥½¸¡È¹Ñ¥Ñ±°¹ÜÑ¡È¹Ñ¤¤ì(ô¤ì((½¹Í½±¹±½ 1ØÍÍ¥ÍÑ¹ÐØ¬AA}YIM%=8¬¥¹¥Ñ¥±¥é¤ì(ð½ÍÉ¥ÁÐø)</body>
+</html>
