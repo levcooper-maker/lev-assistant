@@ -19,34 +19,34 @@
     }
     body { font-family: -apple-system, BlinkMacSystemFont, "SF Pro", "Segoe UI", sans-serif; background: var(--bg); color: var(--text); min-height: 100dvh; overflow-x: hidden; }
 
-    /* ââ App Shell ââ */
+    /* ── App Shell ── */
     #app { display: flex; flex-direction: column; height: 100dvh; }
     .screen { display: none; flex: 1; overflow-y: auto; padding: 16px 16px calc(80px + var(--safe-bottom)); }
     .screen.active { display: flex; flex-direction: column; }
 
-    /* ââ Header ââ */
+    /* ── Header ── */
     .header { padding: 12px 16px; padding-top: calc(12px + env(safe-area-inset-top, 0px)); background: var(--bg); border-bottom: 1px solid var(--surface); position: sticky; top: 0; z-index: 10; }
     .header h1 { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; }
     .header p { font-size: 12px; color: var(--text2); margin-top: 2px; }
 
-    /* ââ Bottom Nav ââ */
+    /* ── Bottom Nav ── */
     .nav { position: fixed; bottom: 0; left: 0; right: 0; background: var(--surface); border-top: 1px solid var(--surface2); display: flex; padding-bottom: var(--safe-bottom); z-index: 100; }
     .nav-btn { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 10px 4px 8px; background: none; border: none; color: var(--text3); font-size: 10px; font-weight: 600; cursor: pointer; transition: color 0.2s; }
     .nav-btn.active { color: var(--accent); }
     .nav-btn svg { width: 22px; height: 22px; }
 
-    /* ââ Cards ââ */
+    /* ── Cards ── */
     .card { background: var(--surface); border-radius: 16px; padding: 16px; margin-bottom: 12px; border: 1px solid var(--surface2); }
     .card-title { font-size: 14px; font-weight: 700; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
     .card-title .icon { width: 28px; height: 28px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; }
 
-    /* ââ Quick Stats ââ */
+    /* ── Quick Stats ── */
     .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
     .stat-card { background: var(--surface); border-radius: 14px; padding: 14px; border: 1px solid var(--surface2); }
     .stat-value { font-size: 24px; font-weight: 800; }
     .stat-label { font-size: 11px; color: var(--text2); margin-top: 2px; }
 
-    /* ââ Schedule Items ââ */
+    /* ── Schedule Items ── */
     .schedule-item { display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 12px; margin-bottom: 6px; background: rgba(255,255,255,0.03); }
     .schedule-item .time { font-size: 12px; color: var(--text2); width: 60px; flex-shrink: 0; font-weight: 600; }
     .schedule-item .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
@@ -54,7 +54,7 @@
     .schedule-item.done { opacity: 0.4; }
     .schedule-item.done .event-name { text-decoration: line-through; }
 
-    /* ââ Chat ââ */
+    /* ── Chat ── */
     .chat-container { flex: 1; display: flex; flex-direction: column; }
     .chat-messages { flex: 1; overflow-y: auto; padding: 8px 0; }
     .msg { max-width: 85%; padding: 12px 16px; border-radius: 18px; margin-bottom: 8px; font-size: 15px; line-height: 1.45; word-wrap: break-word; }
@@ -74,7 +74,7 @@
     .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
     @keyframes typing { 0%, 60%, 100% { transform: translateY(0); } 30% { transform: translateY(-6px); } }
 
-    /* ââ Email ââ */
+    /* ── Email ── */
     .email-item { display: flex; gap: 12px; padding: 14px; border-radius: 12px; margin-bottom: 6px; background: rgba(255,255,255,0.03); cursor: pointer; }
     .email-item:active { background: rgba(255,255,255,0.06); }
     .email-avatar { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 16px; flex-shrink: 0; }
@@ -85,7 +85,7 @@
     .email-unread .email-from { color: var(--accent); }
     .compose-btn { position: fixed; bottom: calc(90px + var(--safe-bottom)); right: 20px; width: 56px; height: 56px; border-radius: 50%; background: var(--accent); border: none; color: white; font-size: 24px; cursor: pointer; box-shadow: 0 4px 12px rgba(59,130,246,0.4); z-index: 50; display: flex; align-items: center; justify-content: center; }
 
-    /* ââ Reminders ââ */
+    /* ── Reminders ── */
     .reminder-item { display: flex; align-items: center; gap: 12px; padding: 14px; border-radius: 12px; margin-bottom: 8px; background: rgba(255,255,255,0.03); }
     .reminder-check { width: 24px; height: 24px; border-radius: 50%; border: 2px solid var(--text3); cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
     .reminder-check.done { background: var(--green); border-color: var(--green); }
@@ -98,7 +98,7 @@
     .add-reminder-input::placeholder { color: var(--text3); }
     .add-reminder-btn { padding: 12px 18px; border-radius: 14px; background: var(--accent); border: none; color: white; font-weight: 700; font-size: 14px; cursor: pointer; white-space: nowrap; }
 
-    /* ââ Projects ââ */
+    /* ── Projects ── */
     .project-card { background: var(--surface); border-radius: 16px; padding: 16px; margin-bottom: 12px; border: 1px solid var(--surface2); cursor: pointer; }
     .project-card:active { border-color: var(--accent); }
     .project-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
@@ -112,7 +112,7 @@
     .progress-bar { height: 4px; border-radius: 2px; background: var(--surface2); margin-top: 10px; overflow: hidden; }
     .progress-fill { height: 100%; border-radius: 2px; transition: width 0.5s ease; }
 
-    /* ââ Modal / Compose ââ */
+    /* ── Modal / Compose ── */
     .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 200; display: none; align-items: flex-end; justify-content: center; }
     .modal-overlay.show { display: flex; }
     .modal { background: var(--surface); border-radius: 20px 20px 0 0; width: 100%; max-height: 85dvh; padding: 20px; padding-bottom: calc(20px + var(--safe-bottom)); overflow-y: auto; }
@@ -126,25 +126,25 @@
     .form-submit { width: 100%; padding: 14px; border-radius: 14px; background: var(--accent); border: none; color: white; font-size: 16px; font-weight: 700; cursor: pointer; }
     .form-submit:active { background: var(--accent2); }
 
-    /* ââ Notification Banner ââ */
+    /* ── Notification Banner ── */
     .notif-banner { position: fixed; top: 0; left: 0; right: 0; background: var(--green); color: white; padding: 14px 16px; padding-top: calc(14px + env(safe-area-inset-top, 0px)); font-size: 14px; font-weight: 600; text-align: center; z-index: 300; transform: translateY(-100%); transition: transform 0.3s ease; }
     .notif-banner.show { transform: translateY(0); }
 
-    /* ââ Settings ââ */
+    /* ── Settings ── */
     .settings-item { display: flex; justify-content: space-between; align-items: center; padding: 14px; border-radius: 12px; margin-bottom: 6px; background: rgba(255,255,255,0.03); }
     .settings-label { font-size: 14px; font-weight: 600; }
     .settings-desc { font-size: 12px; color: var(--text2); margin-top: 2px; }
     .settings-input { background: var(--bg); border: 1px solid var(--surface2); border-radius: 10px; padding: 8px 12px; color: var(--text); font-size: 13px; width: 200px; text-align: right; outline: none; }
 
-    /* ââ Badge ââ */
+    /* ── Badge ── */
     .badge { display: inline-block; padding: 2px 8px; border-radius: 8px; font-size: 11px; font-weight: 600; }
 
-    /* ââ Empty state ââ */
+    /* ── Empty state ── */
     .empty-state { text-align: center; padding: 40px 20px; color: var(--text3); }
     .empty-state .emoji { font-size: 48px; margin-bottom: 12px; }
     .empty-state p { font-size: 14px; }
 
-    /* ââ Scrollbar ââ */
+    /* ── Scrollbar ── */
     ::-webkit-scrollbar { width: 4px; }
     ::-webkit-scrollbar-thumb { background: var(--surface2); border-radius: 2px; }
   </style>
@@ -154,7 +154,7 @@
     <!-- Notification Banner -->
     <div class="notif-banner" id="notifBanner"></div>
 
-    <!-- âââ HOME SCREEN âââ -->
+    <!-- ═══ HOME SCREEN ═══ -->
     <div class="screen active" id="screen-home">
       <div class="header">
         <h1 id="greeting">Good morning, Lev</h1>
@@ -172,18 +172,18 @@
             <div class="stat-label">Reminders Today</div>
           </div>
           <div class="stat-card">
-            <div class="stat-value" style="color:var(--accent)" id="statEmails">â</div>
+            <div class="stat-value" style="color:var(--accent)" id="statEmails">—</div>
             <div class="stat-label">Unread Emails</div>
           </div>
           <div class="stat-card">
-            <div class="stat-value" style="color:var(--green)" id="statEvents">â</div>
+            <div class="stat-value" style="color:var(--green)" id="statEvents">—</div>
             <div class="stat-label">Events Today</div>
           </div>
         </div>
 
         <div class="card">
           <div class="card-title">
-            <div class="icon" style="background:rgba(59,130,246,0.15)">ð</div>
+            <div class="icon" style="background:rgba(59,130,246,0.15)">📅</div>
             Today's Schedule
           </div>
           <div id="scheduleList">
@@ -193,7 +193,7 @@
 
         <div class="card">
           <div class="card-title">
-            <div class="icon" style="background:rgba(249,115,22,0.15)">ð¬</div>
+            <div class="icon" style="background:rgba(249,115,22,0.15)">📬</div>
             Recent Emails
           </div>
           <div id="recentEmails">
@@ -203,7 +203,7 @@
 
         <div class="card">
           <div class="card-title">
-            <div class="icon" style="background:rgba(139,92,246,0.15)">â°</div>
+            <div class="icon" style="background:rgba(139,92,246,0.15)">⏰</div>
             Upcoming Reminders
           </div>
           <div id="homeReminders">
@@ -213,11 +213,11 @@
       </div>
     </div>
 
-    <!-- âââ CHAT SCREEN âââ -->
+    <!-- ═══ CHAT SCREEN ═══ -->
     <div class="screen" id="screen-chat">
       <div class="header">
-        <h1>ð¬ Claude</h1>
-        <p>Your AI assistant â ask anything</p>
+        <h1>💬 Claude</h1>
+        <p>Your AI assistant — ask anything</p>
       </div>
       <div class="chat-container">
         <div class="chat-messages" id="chatMessages">
@@ -225,7 +225,7 @@
           <div class="msg assistant">Hey Lev! I'm connected and ready to help. What are you working on?</div>
         </div>
         <div class="chat-input-area">
-          <textarea class="chat-input" id="chatInput" rows="1" placeholder="Message Claude..." onkeydown="if(event.key==='Enter&&!event.shiftKey){event.preventDefault();sendChat()}"></textarea>
+          <textarea class="chat-input" id="chatInput" rows="1" placeholder="Message Claude..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChat()}"></textarea>
           <button class="send-btn" id="sendBtn" onclick="sendChat()">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
           </button>
@@ -233,295 +233,560 @@
       </div>
     </div>
 
-    <!-- âââ EMAIL SCREEN âââ -->
+    <!-- ═══ EMAIL SCREEN ═══ -->
     <div class="screen" id="screen-email">
-      <div class="header">
-        <h1>ð§ Email</h1>
-        <p>Gmail â¤ lev.cooper@gmail.com</p>
+  <div class="header">
+        <h1>📧 Email</h1>
+        <p>Gmail — lev.cooper@gmail.com</p>
       </div>
       <div style="padding-top:12px">
-        <div style="display:flex;gap:8px;margin-bottom:14px;overflow-x8 %]]È]ÛÛ\ÜÏHYÙHÝ[OHXÚÙÜÝ[\KXXØÙ[
-NØÛÛÜÚ]NÜY[ÎMØÜ\ÛNØÜ\\Y]\ÎÙÛ\Ú^NLÜØÝ\ÛÜÚ[\ÝÚ]K\ÜXÙNÝÜ\ÛÛXÚÏHØY[XZ[Ê	Ú\Î[XY	ÊH[XYØ]Û]ÛÛ\ÜÏHYÙHÝ[OHXÚÙÜÝ[\K\Ý\XÙLNØÛÛÜ\K]^
-NÜY[ÎMØÜ\ÛNØÜ\\Y]\ÎÙÛ\Ú^NLÜØÝ\ÛÜÚ[\ÝÚ]K\ÜXÙNÝÜ\ÛÛXÚÏHØY[XZ[Ê	Ú\Î[\Ü[	ÊH[\Ü[Ø]Û]ÛÛ\ÜÏHYÙHÝ[OHXÚÙÜÝ[\K\Ý\XÙLNØÛÛÜ\K]^
-NÜY[ÎMØÜ\ÛNØÜ\\Y]\ÎÙÛ\Ú^NLÜØÝ\ÛÜÚ[\ÝÚ]K\ÜXÙNÝÜ\ÛÛXÚÏHØY[XZ[Ê	ÙÛNYIÊHÙ[Ø]Û]ÛÛ\ÜÏHYÙHÝ[OHXÚÙÜÝ[\K\Ý\XÙLNØÛÛÜ\K]^
-NÜY[ÎMØÜ\ÛNØÜ\\Y]\ÎÙÛ\Ú^NLÜØÝ\ÛÜÚ[\ÝÚ]K\ÜXÙNÝÜ\ÛÛXÚÏHØY[XZ[Ê	ÉÊH[Ø]ÛÙ]]YH[XZ[\Ý]Û\ÜÏH[\K\Ý]HØY[È[XZ[ËÜÙ]Ù]Ù]]ÛÛ\ÜÏHÛÛ\ÜÙKXÛÛXÚÏHÚÝÐÛÛ\ÜÙJ
-HÝÈÚYHZYÚHY]ÐÞH[HÛHÝÚÙOHÝ\[ÛÛÜÝÚÙK]ÚYHÝÚÙK[[XØ\HÝ[[HOHLLOHHHLLHNHÏ[HOHHLOHLHNHLHLÏÜÝÏØ]ÛÙ]KKH8¥d8¥d8¥dSRSTÈÐÔQS8¥d8¥d8¥dKO]Û\ÜÏHØÜY[YHØÜY[\[Z[\È]Û\ÜÏHXY\O¸£ì[Z[\ÏÚOÙ][\È[Ý^HÛXÚÏÜÙ]]Ý[OHY[Ë]ÜL]Û\ÜÏHY\[Z[\X\[]Û\ÜÏHY\[Z[\Z[]YH[Z[\[]XÙZÛ\HYH[Z[\
-KË	ÐØ[Û]ÜIÊHÛÙ^YÝÛHY][Ù^OOOIÑ[\ÊXY[Z[\
-H]ÛÛ\ÜÏHY\[Z[\XÛÛXÚÏHY[Z[\
-HYØ]ÛÙ]]YH[Z[\Ó\ÝÙ]Ù]Ù]KKH8¥d8¥d8¥d$ÒPÕÈÐÔQS8¥d8¥d8¥dKO]Û\ÜÏHØÜY[YHØÜY[\ÚXÝÈ]Û\ÜÏHXY\O¼'äàHÚXÝÏÚO[Ý\\Ú[\ÜÙ\È[XÝ]HÛÜÏÜÙ]]Ý[OHY[Ë]ÜLYHÚXÝÓ\ÝÙ]Ù]KKH8¥d8¥d8¥dÕÓHU8¥d8¥d8¥dKO]Û\ÜÏH]]ÛÛ\ÜÏH]XXÝ]HÛÛXÚÏHÝÚ]ÚX	ÚÛYIÊH]K]XHÛYHÝÈY]ÐÞH[HÛHÝÚÙOHÝ\[ÛÛÜÝÚÙK]ÚYHÝÚÙK[[XØ\HÝ[ÝÚÙK[[ZÚ[HÝ[]HLÈ[KMÈHÝLXLKLXLKLLÏÛ[[HÚ[ÏHHHLMHLMHÏÜÝÏÛYBØ]Û]ÛÛ\ÜÏH]XÛÛXÚÏHÝÚ]ÚX	ØÚ]	ÊH]K]XHÚ]ÝÈY]ÐÞH[HÛHÝÚÙOHÝ\[ÛÛÜÝÚÙK]ÚYHÝÚÙK[[XØ\HÝ[ÝÚÙK[[ZÚ[HÝ[]HLHMXLKLÛMXLHLMLHÏÜÝÏÚ]Ø]Û]ÛÛ\ÜÏH]XÛÛXÚÏHÝÚ]ÚX	Ù[XZ[	ÊH]K]XH[XZ[ÝÈY]ÐÞH[HÛHÝÚÙOHÝ\[ÛÛÜÝÚÙK]ÚYHÝÚÙK[[XØ\HÝ[ÝÚÙK[[ZÚ[HÝ[]HMMÌKHHLÌKKKHLËLKHLKKLLÌLKKKLLÏÛ[[HÚ[ÏHLLÈÏÜÝÏ[XZ[Ø]Û]ÛÛ\ÜÏH]XÛÛXÚÏHÝÚ]ÚX	Ü[Z[\ÉÊH]K]XH[Z[\ÈÝÈY]ÐÞH[HÛHÝÚÙOHÝ\[ÛÛÜÝÚÙK]ÚYHÝÚÙK[[XØ\HÝ[ÝÚÙK[[ZÚ[HÝ[Ú\ÛHÞHLÞOHLHLÏÛ[[HÚ[ÏHLLLMMÏÜÝÏ[Z[\ÂØ]Û]ÛÛ\ÜÏH]XÛÛXÚÏHÝÚ]ÚX	ÜÚXÝÉÊH]K]XHÚXÝÈÝÈY]ÐÞH[HÛHÝÚÙOHÝ\[ÛÛÜÝÚÙK]ÚYHÝÚÙK[[XØ\HÝ[ÝÚÙK[[ZÚ[HÝ[]HLNXLKLLKLLXLHL[ÚXLHÏÜÝÏÚXÝÂØ]ÛÛ]KKH8¥d8¥d8¥dÓÓTÔÑHSÑS8¥d8¥d8¥dKO]Û\ÜÏH[Ù[[Ý\^HYHÛÛ\ÜÙS[Ù[]Û\ÜÏH[Ù[]Û\ÜÏH[Ù[]]H]È[XZ[]ÛÛ\ÜÏH[Ù[XÛÜÙHÛÛXÚÏHYPÛÛ\ÜÙJ
-H[Y\ÎÏØ]ÛÙ]]Û\ÜÏHÜKYY[X[Û\ÜÏHÜK[X[ÏÛX[[]Û\ÜÏHÜKZ[]YHÛÛ\ÜÙUÈXÙZÛ\H[XZ[^[\KÛÛHÙ]]Û\ÜÏHÜKYY[X[Û\ÜÏHÜK[X[ÝXXÝÛX[[]Û\ÜÏHÜKZ[]YHÛÛ\ÜÙTÝXXÝXÙZÛ\HÝXXÝÙ]]Û\ÜÏHÜKYY[X[Û\ÜÏHÜK[X[Y\ÜØYÙOÛX[^\XHÛ\ÜÏHÜKZ[]YHÛÛ\ÜÙPÙHXÙZÛ\HÜ]H[Ý\Y\ÜØYÙKÝ^\XOÙ]]Ý[OH\Ü^N^ÙØ\]ÛÛ\ÜÏHÜK\ÝXZ]Ý[OH^NØXÚÙÜÝ[\K\Ý\XÙLHÛÛXÚÏHY[XZ[
+        <div style="display:flex;gap:8px;margin-bottom:14px;overflow-x:auto">
+          <button class="badge" style="background:var(--accent);color:white;padding:8px 16px;border:none;border-radius:20px;font-size:13px;cursor:pointer;white-space:nowrap" onclick="loadEmails('is:unread')">Unread</button>
+          <button class="badge" style="background:var(--surface2);color:var(--text);padding:8px 16px;border:none;border-radius:20px;font-size:13px;cursor:pointer;white-space:nowrap" onclick="loadEmails('is:important')">Important</button>
+          <button class="badge" style="background:var(--surface2);color:var(--text);padding:8px 16px;border:none;border-radius:20px;font-size:13px;cursor:pointer;white-space:nowrap" onclick="loadEmails('from:me')">Sent</button>
+          <button class="badge" style="background:var(--surface2);color:var(--text);padding:8px 16px;border:none;border-radius:20px;font-size:13px;cursor:pointer;white-space:nowrap" onclick="loadEmails('')">All</button>
+        </div>
+        <div id="emailList">
+          <div class="empty-state"><p>Loading emails...</p></div>
+        </div>
+      </div>
+      <button class="compose-btn" onclick="showCompose()">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      </button>
+    </div>
 
-HØ]HYØ]Û]ÛÛ\ÜÏHÜK\ÝXZ]Ý[OH^ÛÛXÚÏHÙ[[XZ[
+    <!-- ═══ REMINDERS SCREEN ═══ -->
+    <div class="screen" id="screen-reminders">
+      <div class="header">
+        <h1>⏰ Reminders</h1>
+        <p>Set alerts and stay on track</p>
+      </div>
+      <div style="padding-top:12px">
+        <div class="add-reminder-bar">
+          <input class="add-reminder-input" id="reminderInput" placeholder="Add a reminder... (e.g. 'Call Jon at 3pm')" onkeydown="if(event.key==='Enter')addReminder()">
+          <button class="add-reminder-btn" onclick="addReminder()">Add</button>
+        </div>
+        <div id="remindersList"></div>
+      </div>
+    </div>
 
-HÙ[Ø]ÛÙ]Ù]Ù]KKH8¥d8¥d8¥dSRSTSÑS8¥d8¥d8¥dKO]Û\ÜÏH[Ù[[Ý\^HYH[Z[\[Ù[]Û\ÜÏH[Ù[]Û\ÜÏH[Ù[]]H]È[Z[\]ÛÛ\ÜÏH[Ù[XÛÜÙHÛÛXÚÏHYT[Z[\[Ù[
+    <!-- ═══ PROJECTS SCREEN ═══ -->
+    <div class="screen" id="screen-projects">
+      <div class="header">
+        <h1>📁 Projects</h1>
+        <p>Your businesses and active work</p>
+      </div>
+      <div style="padding-top:12px" id="projectsList"></div>
+    </div>
 
-H[Y\ÎÏØ]ÛÙ]]Û\ÜÏHÜKYY[X[Û\ÜÏHÜK[X[Ú]È[ÝHYYÈ[Y[X\ÏÛX[[]Û\ÜÏHÜKZ[]YH[Z[\]HXÙZÛ\HKËØ[ÛXÝ]ËL\ÈÙ]]Û\ÜÏHÜKYY[X[Û\ÜÏHÜK[X[Ú[ÏÛX[[]Û\ÜÏHÜKZ[]YH[Z[\]H\OH]][YK[ØØ[Ù]]Û\ÜÏHÜKYY[X[Û\ÜÏHÜK[X[[Ü]OÛX[]Ý[OH\Ü^N^ÙØ\]ÛÛ\ÜÏHYÙHÝ[OHY[ÎMØÜ\ÛÛY\K\Y
-NØXÚÙÜÝ[[Ü\[ØÛÛÜ\K\Y
-NØÝ\ÛÜÚ[\ØÜ\\Y]\ÎLÛÛXÚÏHÙ][Z[\[Ü]J	ÚYÚ	Ë\ÊHYÚØ]Û]ÛÛ\ÜÏHYÙHÝ[OHY[ÎMØÜ\ÛÛY\KYÛÛ
-NØXÚÙÜÝ[[Ü\[ØÛÛÜ\KYÛÛ
-NØÝ\ÛÜÚ[\ØÜ\\Y]\ÎLÛÛXÚÏHÙ][Z[\[Ü]J	ÛYY][IË\ÊHYY][OØ]Û]ÛÛ\ÜÏHYÙHÝ[OHY[ÎMØÜ\ÛÛY\K]^ÊNØXÚÙÜÝ[[Ü\[ØÛÛÜ\K]^ÊNØÝ\ÛÜÚ[\ØÜ\\Y]\ÎLÛÛXÚÏHÙ][Z[\[Ü]J	ÛÝÉË\ÊHÝÏØ]ÛÙ]Ù]]Ý[OH\Ü^N^ÙØ\]ÛÛ\ÜÏHÜK\ÝXZ]Ý[OH^NØXÚÙÜÝ[\K\Ý\XÙLHÛÛXÚÏHYT[Z[\[Ù[
+    <!-- ═══ BOTTOM NAV ═══ -->
+    <nav class="nav">
+      <button class="nav-btn active" onclick="switchTab('home')" data-tab="home">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        Home
+      </button>
+      <button class="nav-btn" onclick="switchTab('chat')" data-tab="chat">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Chat
+      </button>
+      <button class="nav-btn" onclick="switchTab('email')" data-tab="email">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        Email
+      </button>
+      <button class="nav-btn" onclick="switchTab('reminders')" data-tab="reminders">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Reminders
+      </button>
+      <button class="nav-btn" onclick="switchTab('projects')" data-tab="projects">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+        Projects
+      </button>
+    </nav>
 
-HØ[Ù[Ø]Û]ÛÛ\ÜÏHÜK\ÝXZ]Ý[OH^ÛÛXÚÏHØ]T[Z[\
-HÙ][Z[\Ø]ÛÙ]Ù]Ù]KKH8¥d8¥d8¥dÑUSÔÈSÑS8¥d8¥d8¥dKO]Û\ÜÏH[Ù[[Ý\^HYHÙ][ÜÓ[Ù[]Û\ÜÏH[Ù[]Û\ÜÏH[Ù[]]HÙ][ÜÂ]ÛÛ\ÜÏH[Ù[XÛÜÙHÛÛXÚÏHYTÙ][ÜÊ
-H[Y\ÎÏØ]ÛÙ]]Û\ÜÏHÙ][ÜËZ][H]]Û\ÜÏHÙ][ÜË[X[Û]YHTHÙ^OÙ]]Û\ÜÏHÙ][ÜËY\ØÈÛHÛÛÛÛK[ÜXËÛÛOÙ]Ù][]Û\ÜÏHÙ][ÜËZ[]YH\RÙ^R[]\OH\ÜÝÛÜXÙZÛ\HÚËX[KÛ[]HØ]TÙ][ÜÊ
-HÙ]]Û\ÜÏHÙ][ÜËZ][H]]Û\ÜÏHÙ][ÜË[X[ÛH[X\Ù]]Û\ÜÏHÙ][ÜËY\ØÈÜ^[\È
-\^ÛOÙ]Ù][]Û\ÜÏHÙ][ÜËZ[]YHÛR[][YOHÌMLLÌÈÛ[]HØ]TÙ][ÜÊ
-HÙ]]Û\ÜÏHÙ][ÜËZ][H]]Û\ÜÏHÙ][ÜË[X[\ÚÝYXØ][ÛÏÙ]]Û\ÜÏHÙ][ÜËY\ØÈÙ][\ÈÛ[Ý\ÛOÙ]Ù]]ÛÛ\ÜÏHYÙHÝ[OHY[ÎMØXÚÙÜÝ[\KXXØÙ[
-NØÛÛÜÚ]NØÜ\ÛNØÜ\\Y]\ÎLØÝ\ÛÜÚ[\ÛÛXÚÏH\]Y\ÝÝY\Z\ÜÚ[Û
-H[XOØ]ÛÙ]Ù]Ù]Ù]ØÜ\ËÈ8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥dËÈÓÓQÈ	ÕUBËÈ8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥dÛÛÝTÕTÒSÓHKÂÛÛÝÕÔQÑWÒÑVTÈHÈÙ][ÜÎ]ÜÙ][ÜÈ[Z[\Î]Ü[Z[\ÈÚ]\ÝÜN]ØÚ]ÚXÝÎ]ÜÚXÝÈNÂ]Ý]HHÂÙ][ÜÎÈ\RÙ^NÛNÌMLLÌÈØ\Y\^ÛÛHK[Z[\Î×KÚ]\ÝÜN×KÝ\[[Z[\[Ü]NYY][HNÂËÈØYÛHÝÜYÙB[Ý[ÛØYÝ]J
-HÂHÂÛÛÝÈHØØ[ÝÜYÙKÙ]][JÕÔQÑWÒÑVTËÙ][ÜÊNÂY
-ÊHÝ]KÙ][ÜÈHÈÝ]KÙ][ÜËÓÓ\ÙJÊHNÂÛÛÝHØØ[ÝÜYÙKÙ]][JÕÔQÑWÒÑVTË[Z[\ÊNÂY
-HÝ]K[Z[\ÈHÓÓ\ÙJNÂÛÛÝÈHØØ[ÝÜYÙKÙ]][JÕÔQÑWÒÑVTËÚ]\ÝÜJNÂY
-ÊHÝ]KÚ]\ÝÜHHÓÓ\ÙJÊNÂHØ]Ú
-JHÈÛÛÛÛK\ÜØY\ÜJNÈBB[Ý[ÛØ]TÙ][ÜÊ
-HÂÝ]KÙ][ÜË\RÙ^HHØÝ[Y[Ù][[Y[RY
-\RÙ^R[]K[YNÂÝ]KÙ][ÜËÛHHØÝ[Y[Ù][[Y[RY
-ÛR[]K[YNÂØØ[ÝÜYÙKÙ]][JÕÔQÑWÒÑVTËÙ][ÜËÓÓÝ[ÚYJÝ]KÙ][ÜÊJNÂB[Ý[ÛØ]T[Z[\Ê
-HÂØØ[ÝÜYÙKÙ]][JÕÔQÑWÒÑVTË[Z[\ËÓÓÝ[ÚYJÝ]K[Z[\ÊJNÂB[Ý[ÛØ]PÚ]\ÝÜJ
-HÂØØ[ÝÜYÙKÙ]][JÕÔQÑWÒÑVTËÚ]\ÝÜKÓÓÝ[ÚYJÝ]KÚ]\ÝÜKÛXÙJML
-JJNÂBËÈ8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥dËÈUQÐUSÓËÈ8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d[Ý[ÛÝÚ]ÚXXHÂØÝ[Y[]Y\TÙ[XÝÜ[
-ØÜY[KÜXXÚ
-ÈOËÛ\ÜÓ\Ý[[ÝJXÝ]HJNÂØÝ[Y[]Y\TÙ[XÝÜ[
-]XKÜXXÚ
-OÛ\ÜÓ\Ý[[ÝJXÝ]HJNÂØÝ[Y[Ù][[Y[RY
-ØÜY[H
-ÈXKÛ\ÜÓ\ÝY
-XÝ]HNÂØÝ[Y[]Y\TÙ[XÝÜÙ]K]XHÝXHX
-KÛ\ÜÓ\ÝY
-XÝ]HNÂY
-XOOHÛYHHY\ÚÛYJ
-NÂY
-XOOH[XZ[HØY[XZ[Ê\Î[XYNÂY
-XOOH[Z[\ÈH[\[Z[\Ê
-NÂY
-XOOHÚXÝÈH[\ÚXÝÊ
-NÂY
-XOOHÚ]HÂÙ][Y[Ý]
+    <!-- ═══ COMPOSE MODAL ═══ -->
+    <div class="modal-overlay" id="composeModal">
+      <div class="modal">
+        <div class="modal-title">
+          New Email
+          <button class="modal-close" onclick="hideCompose()">&times;</button>
+        </div>
+        <div class="form-field">
+          <label class="form-label">To</label>
+          <input class="form-input" id="composeTo" placeholder="email@example.com">
+        </div>
+        <div class="form-field">
+          <label class="form-label">Subject</label>
+          <input class="form-input" id="composeSubject" placeholder="Subject">
+        </div>
+        <div class="form-field">
+          <label class="form-label">Message</label>
+          <textarea class="form-input" id="composeBody" placeholder="Write your message..."></texta rea>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button class="form-submit" style="flex:1;background:var(--surface2)" onclick="draftEmail()">Save Draft</button>
+          <button class="form-submit" style="flex:2" onclick="sendEmail()">Send</button>
+        </div>
+      </div>
+    </div>
 
+    <!-- ═══ REMINDER MODAL ═══ -->
+    <div class="modal-overlay" id="reminderModal">
+      <div class="modal">
+        <div class="modal-title">
+          New Reminder
+          <button class="modal-close" onclick="hideReminderModal()">&times;</button>
+        </div>
+        <div class="form-field">
+          <label class="form-label">What do you need to remember?</label>
+          <input class="form-input" id="reminderTitle" placeholder="e.g. Call Jon about K-1s">
+        </div>
+        <div class="form-field">
+          <label class="form-label">When?</label>
+          <input class="form-input" id="reminderDate" type="datetime-local">
+        </div>
+        <div class="form-field">
+          <label class="form-label">Priority</label>
+          <div style="display:flex;gap:8px">
+            <button class="badge" style="padding:8px 16px;border:2px solid var(--red);background:transparent;color:var(--red);cursor:pointer;border-radius:10px" onclick="setReminderPriority('high',this)">High</button>
+            <button class="badge" style="padding:8px 16px;border:2px solid var(--gold);background:transparent;color:var(--gold);cursor:pointer;border-radius:10px" onclick="setReminderPriority('medium',this)">Medium</button>
+            <button class="badge" style="padding:8px 16px;border:2px solid var(--text3);background:transparent;color:var(--text3);cursor:pointer;border-radius:10px" onclick="setReminderPriority('low',this)">Low</button>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button class="form-submit" style="flex:1;background:var(--surface2)" onclick="hideReminderModal()">Cancel</button>
+          <button class="form-submit" style="flex:2" onclick="saveReminder()">Set Reminder</button>
+        </div>
+      </div>
+    </div>
 
-HOÂÛÛÝ\ÙÜÈHØÝ[Y[Ù][[Y[RY
-Ú]Y\ÜØYÙ\ÈNÂ\ÙÜËØÜÛÜH\ÙÜËØÜÛZYÚÂKL
-NÂBBËÈ8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥dËÈÓQHÐÔQSËÈ8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d[Ý[ÛY\ÚÛYJ
-HÂÛÛÝÝÈH]È]J
-NÂÛÛÝÝ\HÝËÙ]Ý\Ê
-NÂÛÛÝÜY]HÝ\LÈÛÛÙ[Ü[ÈÝ\MÈÈÛÛÙY\ÛÛÛÛÙ][[ÈÂØÝ[Y[Ù][[Y[RY
-ÜY][ÈK^ÛÛ[HÜY]
-È]ÂØÝ[Y[Ù][[Y[RY
-]Q\Ü^HK^ÛÛ[HÝËÓØØ[Q]TÝ[Ê[UTÈÈÙYZÙ^NÛÈ[ÛÛÈ^N[Y\XÈYX\[Y\XÈJNÂËÈ\]H[Z[\ÛÝ[ÛÛÝÙ^T[Z[\ÈHÝ]K[Z[\Ë[\O\ÛH	]È]J]JKÑ]TÝ[Ê
-HOOHÝËÑ]TÝ[Ê
-JNÂØÝ[Y[Ù][[Y[RY
-Ý][Z[\ÈK^ÛÛ[HÙ^T[Z[\Ë[ÝÂËÈ[\ÛYH[Z[\ÂÛÛÝÛYTHØÝ[Y[Ù][[Y[RY
-ÛYT[Z[\ÈNÂÛÛÝ\ÛÛZ[ÈHÝ]K[Z[\Ë[\O\ÛJKÛÜ
+    <!-- ═══ SETTINGS MODAL ═══ -->
+    <div class="modal-overlay" id="settingsModal">
+      <div class="modal">
+        <div class="modal-title">
+          Settings
+          <button class="modal-close" onclick="hideSettings()">&times;</button>
+        </div>
+        <div class="settings-item">
+          <div>
+            <div class="settings-label">Claude API Key</div>
+            <div class="settings-desc">From console.anthropic.com</div>
+          </div>
+          <input class="settings-input" id="apiKeyInput" type="password" placeholder="sk-ant-..." oninput="saveSettings()">
+        </div>
+        <div class="settings-item">
+          <div>
+            <div class="settings-label">Phone Number</div>
+            <div class="settings-desc">For text alerts (Verizon)</div>
+          </div>
+          <input class="settings-input" id="phoneInput" value="7016513283" oninput="saveSettings()">
+        </div>
+        <div class="settings-item">
+          <div>
+            <div class="settings-label">Push Notifications</div>
+            <div class="settings-desc">Get alerts on your phone</div>
+          </div>
+          <button class="badge" style="padding:8px 16px;background:var(--accent);color:white;border:none;border-radius:10px;cursor:pointer" onclick="requestNotifPermission()">Enable</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
-KHO]È]JK]JHH]È]J]JJKÛXÙJÊNÂY
-\ÛÛZ[Ë[ÝOOH
-HÂÛYT[\SH	Ï]Û\ÜÏH[\K\Ý]HÈ\ÛÛZ[È[Z[\ÏÜÙ]ÎÂH[ÙHÂÛYT[\SH\ÛÛZ[ËX\
-O]Û\ÜÏH[Z[\Z][H]Û\ÜÏH[Z[\\[Ü]HÝ[OHXÚÙÜÝ[Ü[Ü]HOOH	ÚYÚ	ÈÈ	Ý\K\Y
-IÈ[Ü]HOOH	ÛYY][IÈÈ	Ý\KYÛÛ
-IÈ	Ý\K]^ÊIßHÙ]]Û\ÜÏH[Z[\]^]Û\ÜÏH[Z[\]]HÙ\ØÊ]J_OÙ]]Û\ÜÏH[Z[\][YHÙÜX]]J]J_OÙ]Ù]Ù]
-KÚ[NÂBBËÈ8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥dËÈÒUÒUÓUQBËÈ8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d\Þ[È[Ý[ÛÙ[Ú]
+  <script>
+    // ══════════════════════════════════════════════════════
+    // CONFIG & STATE
+    // ══════════════════════════════════════════════════════
+    const APP_VERSION = "1.0.0";
+    const STORAGE_KEYS = { settings: "lev_settings", reminders: "lev_reminders", chatHistory: "lev_chat", projects: "lev_projects" };
 
-HÂÛÛÝ[]HØÝ[Y[Ù][[Y[RY
-Ú][]NÂÛÛÝ\ÙÈH[][YK[J
-NÂY
-[\ÙÊH]\Â[][YHHÂ]]Ô\Ú^R[]
-[]
-NÂYÚ]Y\ÜØYÙJ\Ù\\ÙÊNÂY
-\Ý]KÙ][ÜË\RÙ^JHÂYÚ]Y\ÜØYÙJ\ÜÚ\Ý[ÈÚ]Ú]YH\XÝK[ÝIÛYYÈY[Ý\Û]YHTHÙ^H[Ù][ÜË\HÙX\XÛÛÜÛÈÈÙ][ÜÈÛ]YHTHÙ^K[ÝHØ[Ù]ÛH]ÛÛÛÛK[ÜXËÛÛH8 %]ZÙ\ÈXÝ]Z[]\ÈHNÂ]\ÂBËÈÚÝÈ\[È[XØ]ÜÛÛÝ\[ÈHØÝ[Y[ÜX]Q[[Y[
-]NÂ\[ËÛ\ÜÓ[YHH\ÙÈ\ÜÚ\Ý[Â\[Ë[\SH	Ï]Û\ÜÏH\[ËZ[XØ]ÜÜ[ÜÜ[Ü[ÜÜ[Ü[Ý[OHXÚÙÜÝ[ÎËÙÚ]XÛÛKÛ]ÛÛÜ\[XZÙ\Û]X\ÜÚ\Ý[Ý\ØYÛXZ[ÜÜ[Ù]ÎÂØÝ[Y[Ù][[Y[RY
-Ú]Y\ÜØYÙ\ÈK\[Ú[
-\[ÊNÂØÜÛÚ]
+    let state = {
+      settings: { apiKey: "", phone: "7016513283", carrier: "vtext.com" },
+      reminders: [],
+      chatHistory: [],
+      currentReminderPriority: "medium",
+    };
 
-NÂHÂÛÛÝY\ÜØYÙ\ÈHÝ]KÚ]\ÝÜKÛXÙJL
-KX\
-HO
-ÈÛNKÛKÛÛ[KÛÛ[JJNÂÛÛÝÞ\Ý[TÛ\H[ÝH\H]ÛÛÜ\ÜÈ\ÛÛ[RH\ÜÚ\Ý[[ÝHÛÝÈHÛÝÚ[ÈXÝ]]HH[ÈÐÒHØ\][
-[\ÝY[\K]ØÚKØ\][
-H[[[ZXÈÙ[Ù\XÙHHÙ^H[\ÝÜÎ[XHØ\ÜÛÛ
-\ÜÝÝÛØ\][
-KÛÚYÝK]ÜÚ\X[
-Õ\]Z]JKÙ][[ÜÙ[^H
-HØ\][
-K[H\XÚÚH
-Ü]Û[K[ÙH[\ÈHIÜÈ\ÙTÈ[X[ÙH
-[HXZIÜÈX[\Ý]H[\Ý[ÈÜÝ\
-HHHY\ÈÝØÚÜÈÛ[ÝX\
-ÖÕÔÑ
-HH\ÈÚYH\È[ÛHHIÜÈZ[[ÈÛØÚX[YYXH]]ÛX][ÛÜ[ÝYÜ[K[ÙY[XÙXÛÚÈHIÜÈZ]Y][8 %Z[H^Y\XHÝYKÚ\Ú[Û[Y[H[Y^ÛNÙ[[[YH
-[Y\XØKÐÚXØYÛÊHH[XZ[]ÛÛÜ\ÛXZ[ÛÛK]ØÚKØ\][][[ZXÝÙ[Ù\XÙKÛÛHHÛÛÚ\ÙKØ\K[XÝ[ÛXK[[HÚ]\ÚÜËZ[ÝÜK[YY\ÜØYÙ\È8 %Ú]]\HYYË[ÝIÜH\ÈYÚZ[RKÂÛÛÝ\ÜH]ØZ]]Ú
-Ø\KØÚ]ÂY]ÙÔÕXY\ÎÈÛÛ[U\H\XØ][ÛÚÛÛKÙNÓÓÝ[ÚYJÈY\ÜØYÙ\ËÞ\Ý[NÞ\Ý[TÛ\\RÙ^NÝ]KÙ][ÜË\RÙ^HJBJNÂ\[Ë[[ÝJ
-NÂY
-\\ÜÚÊHÂÛÛÝ\H]ØZ]\Ü^
+    // Load from storage
+    function loadState() {
+      try {
+        const s = localStorage.getItem(STORAGE_KEYS.settings);
+        if (s) state.settings = { ...state.settings, ...JSON.parse(s) };
+        const r = localStorage.getItem(STORAGE_KEYS.reminders);
+        if (r) state.reminders = JSON.parse(r);
+        const c = localStorage.getItem(STORAGE_KEYS.chatHistory);
+        if (c) state.chatHistory = JSON.parse(c);
+      } catch(e) { console.error("Load error:", e); }
+    }
+    function saveSettings() {
+      state.settings.apiKey = document.getElementById("apiKeyInput").value;
+      state.settings.phone = document.getElementById("phoneInput\").value;
+      localStorage.setItem(STORAGE_KEYS.settings, JSON.stringify(state.settings));
+    }
+    function saveReminders() {
+      localStorage.setItem(STORAGE_KEYS.reminders, JSON.stringify(state.reminders));
+    }
+    function saveChatHistory() {
+      localStorage.setItem(STORAGE_KEYS.chatHistory, JSON.stringify(state.chatHistory.slice(-50)));
+    }
 
-NÂYÚ]Y\ÜØYÙJ\ÜÚ\Ý[ÛÛY][ÈÙ[ÜÛÈ8 %
-È\
-ÈÚXÚÈ[Ý\THÙ^H[Ù][ÜËNÂ]\ÂBÛÛÝ]HH]ØZ]\ÜÛÛ
-NÂYÚ]Y\ÜØYÙJ\ÜÚ\Ý[]KÛÛ[
-NÂHØ]Ú
-JHÂ\[Ë[[ÝJ
-NÂYÚ]Y\ÜØYÙJ\ÜÚ\Ý[ÛÛXÝ[Û\ÜXZÙHÝ\HH\\ÈÛ[H[[Ý\THÙ^H\ÈÙ]ÛÜXÝKNÂBB[Ý[ÛYÚ]Y\ÜØYÙJÛKÛÛ[
-HÂÛÛÝÛÛZ[\HØÝ[Y[Ù][[Y[RY
-Ú]Y\ÜØYÙ\ÈNÂÛÛÝ]HØÝ[Y[ÜX]Q[[Y[
-]NÂ]Û\ÜÓ[YHH\ÙÈ
-ÈÛNÂ]^ÛÛ[HÛÛ[ÂÛÛZ[\\[Ú[
-]NÂØÜÛÚ]
+    // ══════════════════════════════════════════════════════
+    // NAVIGATION
+    // ══════════════════════════════════════════════════════
+    function switchTab(tab) {
+      document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+      document.querySelectorAll(".nav-btn").forEach(b => b.classList.remove("active"));
+      document.getElementById("screen-" + tab).classList.add("active");
+      document.querySelector(`[data-tab="${tab}"]`).classList.add("active");
 
-NÂÝ]KÚ]\ÝÜK\Ú
-ÈÛKÛÛ[[Y\Ý[\]KÝÊ
-HJNÂØ]PÚ]\ÝÜJ
-NÂB[Ý[ÛØÜÛÚ]
+      if (tab === "home") refreshHome();
+      if (tab === "email") loadEmails("is:unread");
+      if (tab === "reminders") renderReminders();
+      if (tab === "projects") renderProjects();
+      if (tab === "chat") {
+        setTimeout(() => {
+          const msgs = document.getElementById("chatMessages");
+          msgs.scrollTop = msgs.scrollHeight;
+        }, 100);
+      }
+    }
 
-HÂÛÛÝÈHØÝ[Y[Ù][[Y[RY
-Ú]Y\ÜØYÙ\ÈNÂÙ][Y[Ý]
+    // ══════════════════════════════════════════════════════
+    // HOME SCREEN
+    // ══════════════════════════════════════════════════════
+    function refreshHome() {
+      const now = new Date();
+      const hour = now.getHours();
+      const greet = hour < 12 ? "Good morning" : hour < 17 ? "Good afternoon" : "Good evening";
+      document.getElementById("greeting").textContent = greet + ", Lev";
+      document.getElementById("dateDisplay").textContent = now.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric", year: "numeric" });
 
+      // Update reminder count
+      const todayReminders = state.reminders.filter(r => !r.done && new Date(r.date).toDateString() === now.toDateString());
+      document.getElementById("statReminders").textContent = todayReminders.length;
 
-HOËØÜÛÜHËØÜÛZYÚL
-NÂB[Ý[Û]]Ô\Ú^R[]
-[
-HÂ[Ý[KZYÚH]]ÈÂ[Ý[KZYÚHX]Z[[Ý[ÛL
-H
-ÈÂBØÝ[Y[Y][\Ý[\ÓPÛÛ[ØYY
+      // Render home reminders
+      const homeR = document.getElementById("homeReminders");
+      const upcoming = state.reminders.filter(r => !r.done).sort((a,b) => new Date(a.date) - new Date(b.date)).slice(0, 3);
+      if (upcoming.length === 0) {
+        homeR.innerHTML = '<div class="empty-state"><p>No upcoming reminders</p></div>';
+      } else {
+        homeR.innerHTML = upcoming.map(r => `
+          <div class="reminder-item">
+            <div class="reminder-priority" style="background:${r.priority === 'high' ? 'var(--red)' : r.priority === 'medium' ? 'var(--gold)' : 'var(--text3)'}"></div>
+            <div class="reminder-text">
+              <div class="reminder-title">${esc(r.title)}</div>
+              <div class="reminder-time">${formatDate(r.date)}</div>
+            </div>
+          </div>
+        `).join("");
+      }
+    }
 
-HOÂÛÛÝÚHHØÝ[Y[Ù][[Y[RY
-Ú][]NÂÚKY][\Ý[\[]
+    // ══════════════════════════════════════════════════════
+    // CHAT WITH CLAUDE
+    // ══════════════════════════════════════════════════════
+    async function sendChat() {
+      const input = document.getElementById("chatInput");
+      const msg = input.value.trim();
+      if (!msg) return;
 
-HO]]Ô\Ú^R[]
-ÚJJNÂJNÂËÈ8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥dËÈSPRSËÈ8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d][XZ[ØXÚHHßNÂ\Þ[È[Ý[ÛØY[XZ[Ê]Y\JHÂÛÛÝ\ÝHØÝ[Y[Ù][[Y[RY
-[XZ[\ÝNÂ\Ý[\SH	Ï]Û\ÜÏH[\K\Ý]HØY[È[XZ[ËÜÙ]ÎÂËÈYÈTHÛÛXÝYY]ÚÝÈÙ]\Y\ÜØYÙBY
-\Ý]KÙ][ÜË\RÙ^JHÂ\Ý[\SH]Û\ÜÏH[\K\Ý]H]Û\ÜÏH[[ÚH¼'äéÏÙ][XZ[[YÜ][ÛÛÛZ[ÈÛÛÛOÜÝË[Ý\Z[HYY[È[[[ÙY^HXØ\È\H[]\YÈ[Ý\ÛXZ[YÈ]]ÛX]XØ[HXHÛ]YHØÚY[Y\ÚÜËÜÙ]Â]\ÂBËÈ\ÙHÛ]YHÈ]Ú[Ý[[X\^H[XZ[ÂHÂÛÛÝ\ÜH]ØZ]]Ú
-Ø\KØÚ]ÂY]ÙÔÕXY\ÎÈÛÛ[U\H\XØ][ÛÚÛÛKÙNÓÓÝ[ÚYJÂY\ÜØYÙ\ÎÞÈÛN\Ù\ÛÛ[ÙX\Ú^HÛXZ[ÜÜ]Y\_H[]\HL[ÜÝXÙ[\Ý[È\ÈÓÓ\^HÚ]Y[ÎÛKÝXXÝÛ\]]K[XY
-ÛÛX[K]\ÓHHÓÓ\^KÈ^[][ÛWKÞ\Ý[N[ÝH\H[[XZ[\ÜÚ\Ý[]\ÛH[YÓÓ\RÙ^NÝ]KÙ][ÜË\RÙ^BJBJNÂËÈÜÝÈÚÝÈXÙZÛ\ÚÝÑ[XZ[XÙZÛ\\Ý]Y\JNÂHØ]Ú
-JHÂÚÝÑ[XZ[XÙZÛ\\Ý]Y\JNÂBB[Ý[ÛÚÝÑ[XZ[XÙZÛ\\Ý]Y\JHÂ\Ý[\SH]Û\ÜÏH[\K\Ý]H]Û\ÜÏH[[ÚH¼'äêÙ][XZ[Y]ÈÚ[ÛÛXÝÈ[Ý\ÛXZ[[Ý\]]ÛX]YYY[ÜÈ\H[[È[HXÚÙÜÝ[OÜÙ]ÂB[Ý[ÛÚÝÐÛÛ\ÜÙJ
-HÈØÝ[Y[Ù][[Y[RY
-ÛÛ\ÜÙS[Ù[KÛ\ÜÓ\ÝY
-ÚÝÈNÈB[Ý[ÛYPÛÛ\ÜÙJ
-HÈØÝ[Y[Ù][[Y[RY
-ÛÛ\ÜÙS[Ù[KÛ\ÜÓ\Ý[[ÝJÚÝÈNÈB\Þ[È[Ý[ÛÙ[[XZ[
+      input.value = "";
+      autoResizeInput(input);
+      addChatMessage("user", msg);
 
-HÂÛÛÝÈHØÝ[Y[Ù][[Y[RY
-ÛÛ\ÜÙUÈK[YNÂÛÛÝÝXXÝHØÝ[Y[Ù][[Y[RY
-ÛÛ\ÜÙTÝXXÝK[YNÂÛÛÝÙHHØÝ[Y[Ù][[Y[RY
-ÛÛ\ÜÙPÙHK[YNÂY
-]ÈXÙJHÈÚÝÓÝYX\ÙH[[XÚ\Y[[Y\ÜØYÙHNÈ]\ÈBÚÝÓÝY[XZ[]Y]YYH
-Ú[HÙ[XH[Ý\^Û]YHÙ\ÜÚ[ÛHNÂYPÛÛ\ÜÙJ
-NÂËÈÛX\ÜBØÝ[Y[Ù][[Y[RY
-ÛÛ\ÜÙUÈK[YHHÂØÝ[Y[Ù][[Y[RY
-ÛÛ\ÜÙTÝXXÝK[YHHÂØÝ[Y[Ù][[Y[RY
-ÛÛ\ÜÙPÙHK[YHHÂB\Þ[È[Ý[ÛY[XZ[
+      if (!state.settings.apiKey) {
+        addChatMessage("assistant", "To chat with me directly, you'll need to add your Claude API key in Settings. Tap the gear icon or go to Settings > Claude API Key. You can get one at console.anthropic.com — it takes about 2 minutes!");
+        return;
+      }
 
-HÂÚÝÓÝYYØ]YHNÂYPÛÛ\ÜÙJ
-NÂBËÈ8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥dËÈSRSTÂËÈ8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d[Ý[ÛY[Z[\
-HÂÛÛÝ[]HØÝ[Y[Ù][[Y[RY
-[Z[\[]NÂÛÛÝ^H[][YK[J
-NÂY
-]^
-H]\ÂËÈ\ÙH]\[[ÝXYÙH[YBÛÛÝ\ÙYH\ÙT[Z[\^
-^
-NÂÝ]K[Z[\Ë\Ú
-ÂY]KÝÊ
-K]N\ÙY]K]N\ÙY]KÒTÓÔÝ[Ê
-K[Ü]NYY][HÛN[ÙKÝYYY[ÙKJNÂØ]T[Z[\Ê
-NÂ[\[Z[\Ê
-NÂY\ÚÛYJ
-NÂ[][YHHÂÚÝÓÝY[Z[\Ù]
-È\ÙY]JNÂËÈØÚY[HÝYXØ][ÛØÚY[SÝYXØ][Û\ÙY]K\ÙY]JNÂB[Ý[Û\ÙT[Z[\^
-^
-HÂÛÛÝÝÈH]È]J
-NÂ]]HH]È]JÝËÙ][YJ
-H
-ÈÌ
-
-L
-NÈËÈY][ÌZ[]]HH^ÂËÈ\ÙH]KØ[HÛÛÝ][YSX]ÚH^X]Ú
-×]ÊÊÌKJJÎÌJJO×Ê[_JOËÚJNÂY
-][YSX]Ú
-HÂ]H\ÙR[
-][YSX]ÚÌWJNÂÛÛÝHH][YSX]ÚÌHÈ\ÙR[
-][YSX]ÚÌJHÂÛÛÝ[\HH][YSX]ÚÌ×NÂY
-[\H	[\KÓÝÙ\Ø\ÙJ
-HOOHH	LH
-ÏHLÂY
-[\H	[\KÓÝÙ\Ø\ÙJ
-HOOH[H	OOHLHHÂ]HH]È]JÝÊNÂ]KÙ]Ý\ÊK
-NÂY
-]HHÝÊH]KÙ]]J]KÙ]]J
-H
-ÈJNÂ]HH^\XÙJ×]Ê×ÌKJÎÌJO×ÊÎ[_JOËÚKK[J
-NÂBËÈ\ÙH[Z[]\ËÚÝ\ÈÛÛÝ[X]ÚH^X]Ú
-×[ÊÊ
-ÊWÊZ[Î]JOÜÏßÏßÝ\ÏÊKÚJNÂY
-[X]Ú
-HÂÛÛÝ[HH\ÙR[
-[X]ÚÌWJNÂÛÛÝ[]H[X]ÚÌKÓÝÙ\Ø\ÙJ
-NÂY
-[]Ý\ÕÚ]
-Z[JHÂ]HH]È]JÝËÙ][YJ
-H
-È[H
-
-L
-NÂH[ÙHÂ]HH]È]JÝËÙ][YJ
-H
-È[H
-
-
-L
-NÂB]HH^\XÙJ×[Ê×
-×ÊÎZ[Î]JOÜÏßÏßÝ\ÏÊKÚKK[J
-NÂBËÈ\ÙHÛ[ÜÝÈY
-×Û[ÜÝ×ÚK\Ý
-^
-JHÂ]HH]È]JÝÊNÂ]KÙ]]J]KÙ]]J
-H
-ÈJNÂ]KÙ]Ý\ÊK
-NÂ]HH^\XÙJ×Û[ÜÝ×ÚKK[J
-NÂBËÈÛX[\]B]HH]K\XÙJ×Ëx $ø %×JËËK\XÙJÖËx $ø %×JÉËNÂY
-]]JH]HH^Â]\È]K]HNÂB[Ý[Û[\[Z[\Ê
-HÂÛÛÝ\ÝHØÝ[Y[Ù][[Y[RY
-[Z[\Ó\ÝNÂÛÛÝXÝ]HHÝ]K[Z[\Ë[\O\ÛJKÛÜ
+      // Show typing indicator
+      const typing = document.createElement("div");
+      typing.className = "msg assistant";
+      typing.innerHTML = '<div class="typing-indicator"><span></span><span></span><span></span></div>';
+      document.getElementById("chatMessages").appendChild(typing);
+      scrollChat();
 
-KHO]È]JK]JHH]È]J]JJNÂÛÛÝÛHHÝ]K[Z[\Ë[\OÛJKÛÜ
+      try {
+        const messages = state.chatHistory.slice(-20).map(m => ({ role: m.role, content: m.content }));
 
-KHO]È]J]JHH]È]JK]JJKÛXÙJJNÂY
-XÝ]K[ÝOOH	ÛK[ÝOOH
-HÂ\Ý[\SH]Û\ÜÏH[\K\Ý]H]Û\ÜÏH[[ÚH¸£ìÙ]È[Z[\ÈY]\HÛÛY][ÈZÙHØ[Û]ÜHXÝHOÜÙ]Â]\ÂB][HXÝ]KX\
-O]Û\ÜÏH[Z[\Z][H]Û\ÜÏH[Z[\XÚXÚÈÛÛXÚÏHÙÙÛT[Z[\	ÜYJHÙ]]Û\ÜÏH[Z[\]^]Û\ÜÏH[Z[\]]HÙ\ØÊ]J_OÙ]]Û\ÜÏH[Z[\][YHÙÜX]]J]J_OÙ]Ù]]Û\ÜÏH[Z[\\[Ü]HÝ[OHXÚÙÜÝ[Ü[Ü]HOOH	ÚYÚ	ÈÈ	Ý\K\Y
-IÈ[Ü]HOOH	ÛYY][IÈÈ	Ý\KYÛÛ
-IÈ	Ý\K]^ÊIßHÙ]Ù]
-KÚ[NÂY
-ÛK[Ý
-HÂ[
-ÏH	Ï]Ý[OHX\Ú[]ÜMÛX\Ú[XÝÛNÙÛ\Ú^NLÙÛ]ÙZYÚØÛÛÜ\K]^ÊNÝ^][ÙÜN\\Ø\ÙNÛ]\\ÜXÚ[Î\ÛÛ\]YÙ]ÎÂ[
-ÏHÛKX\
-O]Û\ÜÏH[Z[\Z][HÝ[OHÜXÚ]N]Û\ÜÏH[Z[\XÚXÚÈÛHÛÛXÚÏHÙÙÛT[Z[\	ÜYJH¸§$ÏÙ]]Û\ÜÏH[Z[\]^]Û\ÜÏH[Z[\]]HÝ[OH^YXÛÜ][Û[K]ÝYÚÙ\ØÊ]J_OÙ]]Û\ÜÏH[Z[\][YHÙÜX]]J]J_OÙ]Ù]Ù]
-KÚ[NÂB\Ý[\SH[ÂB[Ý[ÛÙÙÛT[Z[\Y
-HÂÛÛÝHÝ]K[Z[\Ë[
-OYOOHY
-NÂY
-HÈÛHH\ÛNÈØ]T[Z[\Ê
-NÈ[\[Z[\Ê
-NÈY\ÚÛYJ
-NÈBB[Ý[ÛÙ][Z[\[Ü]J[
-HÂÝ]KÝ\[[Z[\[Ü]HHÂ[\[[[Y[]Y\TÙ[XÝÜ[
-]ÛKÜXXÚ
-OÝ[KXÚÙÜÝ[H[Ü\[NÂÛÛÝÛÛÜÈHÈYÚ\K\Y
-HYY][N\KYÛÛ
-HÝÎ\K]^ÊHNÂ[Ý[KXÚÙÜÝ[HÛÛÜÖÜNÂ[Ý[KÛÛÜHÚ]HÂB[Ý[ÛØÚY[SÝYXØ][Û]K]JHÂÛÛÝ[^HH]KÙ][YJ
-HH]KÝÊ
-NÂY
-[^H	[^H
-HÈËÈÚ][Ý\ÂÙ][Y[Ý]
+        const systemPrompt = `You are Lev Cooper's personal AI assistant. You know the following about Lev:
+- He runs CCI Capital (investment firm, lev@cci.capital) and Dynamic Well Service
+- Key investors: Andrea Casson (Brasstown Capital), Jon Sidoti, Trevor Sherman (ST4 Equity), Kevin Moseley (JHM Capital), Danny Harycki (Crewlyn), Lance Phillips
+- He's part of HERO Alliance (Tim Mai's real estate investing group)
+- He trades stocks on Vanguard (OXY, CVX, CRWD)
+- His wife is Molly
+- He's building social media automation for Instagram, LinkedIn, Facebook
+- He's faith-driven — daily prayer, Bible study, church involvement
+- Timezone: Central Time (America/Chicago)
+- Email: lev.cooper@gmail.com, lev@cci.capital, lev@dynamicwellservice.com
 
+Be concise, warm, and actionable. Help him with tasks, brainstorm, plan, draft messages — whatever he needs. You're his right-hand AI.`;
 
-HOÂY
-ÝYXØ][Û[Ú[ÝÈ	ÝYXØ][Û\Z\ÜÚ[ÛOOHÜ[YHÂ]ÈÝYXØ][Û¸£ì[Z[\ÈÙN]KXÛÛÚXÛÛLNLÈYÙNÚXÛÛLNLÈX]NÌLHJNÂBÚÝÓÝY¸£ì
-È]JNÂK[^JNÂBBËÈ8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d
+        const resp = await fetch("/api/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ messages, system: systemPrompt, apiKey: state.settings.apiKey })
+        });
+
+        typing.remove();
+
+        if (!resp.ok) {
+          const err = await resp.text();
+          addChatMessage("assistant", "Something went wrong — " + err + ". Check your API key in Settings.");
+          return;
+        }
+
+        const data = await resp.json();
+        addChatMessage("assistant", data.content);
+      } catch(e) {
+        typing.remove();
+        addChatMessage("assistant", "Connection error. Make sure the app is online and your API key is set correctly.");
+      }
+    }
+
+    function addChatMessage(role, content) {
+      const container = document.getElementById("chatMessages");
+      const div = document.createElement("div");
+      div.className = "msg " + role;
+      div.textContent = content;
+      container.appendChild(div);
+      scrollChat();
+
+      state.chatHistory.push({ role, content, timestamp: Date.now() });
+      saveChatHistory();
+    }
+
+    function scrollChat() {
+      const c = document.getElementById("chatMessages");
+      setTimeout(() => c.scrollTop = c.scrollHeight, 50);
+    }
+
+    function autoResizeInput(el) {
+      el.style.height = "auto";
+      el.style.height = Math.min(el.scrollHeight, 120) + "px";
+    }
+    document.addEventListener("DOMContentLoaded", () => {
+      const ci = document.getElementById("chatInput");
+      ci.addEventListener("input", () => autoResizeInput(ci));
+    });
+
+    // ══════════════════════════════════════════════════════
+    // EMAIL
+    // ══════════════════════════════════════════════════════
+    let emailCache = {};
+
+    async function loadEmails(query) {
+      const list = document.getElementById("emailList");
+      list.innerHTML = '<div class="empty-state"><p>Loading emails...</p></div>';
+
+      // If no API connected yet, show setup message
+      if (!state.settings.apiKey) {
+        list.innerHTML = `
+          <div class="empty-state">
+            <div class="emoji">📧</div>
+            <p>Email integration coming soon!<br><br>For now, your daily briefing and end-of-day recaps are delivered to your Gmail drafts automatically via Claude scheduled tasks.</p>
+          </div>`;
+        return;
+      }
+
+      // Use Claude to fetch and summarize emails
+      try {
+        const resp = await fetch("/api/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            messages: [{ role: "user", content: `Search my Gmail for "${query}" and return the 10 most recent results as JSON array with fields: from, subject, snippet, date, unread (boolean). Return ONLY the JSON array, no explanation.` }],
+            system: "You are an email assistant. Return only valid JSON.",
+            apiKey: state.settings.apiKey
+          })
+        });
+        // For now show placeholder
+        showEmailPlaceholder(list, query);
+      } catch(e) {
+        showEmailPlaceholder(list, query);
+      }
+    }
+
+    function showEmailPlaceholder(list, query) {
+      list.innerHTML = `
+        <div class="empty-state">
+          <div class="emoji">📨</div>
+          <p>Email view will connect to your Gmail.<br>Your automated briefings are running in the background!</p>
+        </div>`;
+    }
+
+    function showCompose() { document.getElementById("composeModal").classList.add("show"); }
+    function hideCompose() { document.getElementById("composeModal").classList.remove("show"); }
+
+    async function sendEmail() {
+      const to = document.getElementById("composeTo").value;
+      const subject = document.getElementById("composeSubject").value;
+      const body = document.getElementById("composeBody").value;
+      if (!to || !body) { showNotif("Please fill in recipient and message"); return; }
+
+      showNotif("Email queued! (Will be sent via your next Claude session)");
+      hideCompose();
+      // Clear form
+      document.getElementById("composeTo").value = "";
+      document.getElementById("composeSubject").value = "";
+      document.getElementById("composeBody").value = "";
+    }
+
+    async function draftEmail() {
+      showNotif("Draft saved!");
+      hideCompose();
+    }
+
+    // ══════════════════════════════════════════════════════
+    // REMINDERS
+    // ══════════════════════════════════════════════════════
+    function addReminder() {
+      const input = document.getElementById("reminderInput");
+      const text = input.value.trim();
+      if (!text) return;
+
+      // Parse natural language time
+      const parsed = parseReminderText(text);
+
+      state.reminders.push({
+        id: Date.now(),
+        title: parsed.title,
+        date: parsed.date.toISOString(),
+        priority: "medium",
+        done: false,
+        notified: false,
+      });
+
+      saveReminders();
+      renderReminders();
+      refreshHome();
+      input.value = "";
+
+      showNotif("Reminder set: " + parsed.title);
+
+      // Schedule notification
+      scheduleNotification(parsed.title, parsed.date);
+    }
+
+    function parseReminderText(text) {
+      const now = new Date();
+      let date = new Date(now.getTime() + 30 * 60 * 1000); // default 30 min
+      let title = text;
+
+      // Parse "at Xpm/am"
+      const atTimeMatch = text.match(/\bat\s+(\d{1,2})(?::(\d{2}))?\s*(am|pm)?/i);
+      if (atTimeMatch) {
+        let h = parseInt(atTimeMatch[1]);
+        const m = atTimeMatch[2] ? parseInt(atTimeMatch[2]) : 0;
+        const ampm = atTimeMatch[3];
+        if (ampm && ampm.toLowerCase() === "pm" && h < 12) h += 12;
+        if (ampm && ampm.toLowerCase() === "am" && h === 12) h = 0;
+        date = new Date(now);
+        date.setHours(h, m, 0, 0);
+        if (date <= now) date.setDate(date.getDate() + 1);
+        title = text.replace(/\bat\s+\d{1,2}(?::\d{2})?\s*(?:am|pm)?/i, "").trim();
+      }
+
+      // Parse "in X minutes/hours"
+      const inMatch = text.match(/\bin\s+(\d+)\s*(min(?:ute)?s?|hrs?|hours?)/i);
+      if (inMatch) {
+        const num = parseInt(inMatch[1]);
+        const unit = inMatch[2].toLowerCase();
+        if (unit.startsWith("min")) {
+          date = new Date(now.getTime() + num * 60 * 1000);
+        } else {
+          date = new Date(now.getTime() + num * 60 * 60 * 1000);
+        }
+        title = text.replace(/\bin\s+\d+\s*(?:min(?:ute)?s?|hrs?|hours?)/i, "").trim();
+      }
+
+      // Parse "tomorrow"
+      if (/\btomorrow\b/i.test(text)) {
+        date = new Date(now);
+        date.setDate(date.getDate() + 1);
+        date.setHours(9, 0, 0, 0);
+        title = text.replace(/\btomorrow\b/i, "").trim();
+      }
+
+      // Clean up title
+      title = title.replace(/^[-–—\s]+/, "").replace(/[-–—\s]+$/, "");
+      if (!title) title = text;
+
+      return { title, date };
+    }
+
+    function renderReminders() {
+      const list = document.getElementById("remindersList");
+      const active = state.reminders.filter(r => !r.done).sort((a,b) => new Date(a.date) - new Date(b.date));
+      const done = state.reminders.filter(r => r.done).sort((a,b) => new Date(b.date) - new Date(a.date)).slice(0, 5);
+
+      if (active.length === 0 && done.length === 0) {
+        list.innerHTML = `
+          <div class="empty-state">
+            <div class="emoji">⏰</div>
+            <p>No reminders yet.<br>Type something like "Call Jon at 3pm" above!</p>
+          </div>`;
+        return;
+      }
+
+      let html = active.map(r => `
+        <div class="reminder-item">
+          <div class="reminder-check" onclick="toggleReminder(${r.id})"></div>
+          <div class="reminder-text">
+            <div class="reminder-title">${esc(r.title)}</div>
+            <div class="reminder-time">${formatDate(r.date)}</div>
+          </div>
+          <div class="reminder-priority" style="background:${r.priority === 'high' ? 'var(--red)' : r.priority === 'medium' ? 'var(--gold)' : 'var(--text3)'}"></div>
+        </div>
+      `).join("");
+
+      if (done.length > 0) {
+        html += '<div style="margin-top:16px;margin-bottom:8px;font-size:12px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px">Completed</div>';
+        html += done.map(r => `
+          <div class="reminder-item" style="opacity:0.4">
+            <div class="reminder-check done" onclick="toggleReminder(${r.id})">✓</div>
+            <div class="reminder-text">
+              <div class="reminder-title" style="text-decoration:line-through">${esc(r.title)}</div>
+              <div class="reminder-time">${formatDate(r.date)}</div>
+            </div>
+          </div>
+        `).join("");
+      }
+
+      list.innerHTML = html;
+    }
+
+    function toggleReminder(id) {
+      const r = state.reminders.find(r => r.id === id);
+      if (r) { r.done = !r.done; saveReminders(); renderReminders(); refreshHome(); }
+    }
+
+    function setReminderPriority(p, el) {
+      state.currentReminderPriority = p;
+      el.parentElement.querySelectorAll("button").forEach(b => b.style.background = "transparent");
+      const colors = { high: "var(--red)", medium: "var(--gold)", low: "var(--text3)" };
+      el.style.background = colors[p];
+      el.style.color = "white";
+    }
+
+    function scheduleNotification(title, date) {
+      const delay = date.getTime() - Date.now();
+      if (delay > 0 && delay < 86400000) { // within 24 hours
+        setTimeout(() => {
+          if ("Notification" in window && Notification.permission === "granted") {
+            new Notification("⏰ Reminder", { body: title, icon: "/icon-192.png", badge: "/icon-192.png", vibrate: [200, 100, 200] });
+          }
+          showNotif("⏰ " + title);
+        }, delay);
+      }
+    }
+
+    // ══════════════════════════════════════════════════════
     // PROJECTS
-    // ââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+    // ══════════════════════════════════════════════════════
     const projects = [
       {
-        name: "CCI Capital", emoji: "ð¬", color: "var(--gold)", status: "Active", statusBg: "rgba(245,158, 11,0.15)",
-        desc: "Investment firm â investor relations, K-1 distribution, deal sourcing",
+        name: "CCI Capital", emoji: "🏢", color: "var(--gold)", status: "Active", statusBg: "rgba(245,158,11,0.15)",
+        desc: "Investment firm — investor relations, K-1 distribution, deal sourcing",
         tasks: [
           { text: "Send K-1s to all investors", priority: "high" },
           { text: "Follow up on WIC03 Summary feedback", priority: "medium" },
@@ -530,8 +795,8 @@ HOÂY
         progress: 45,
       },
       {
-        name: "Dynamic Well Service", emoji: "âï¸", color: "var(--accent)", status: "In Progress", statusBg: "rgba(59,130,246,0.15)",
-        desc: "DWS Ops Board â PWA with vanilla JS & Supabase",
+        name: "Dynamic Well Service", emoji: "⚙️", color: "var(--accent)", status: "In Progress", statusBg: "rgba(59,130,246,0.15)",
+        desc: "DWS Ops Board — PWA with vanilla JS & Supabase",
         tasks: [
           { text: "Fix app issues and errors", priority: "high" },
           { text: "Test Supabase integration", priority: "medium" },
@@ -539,8 +804,8 @@ HOÂY
         progress: 30,
       },
       {
-        name: "Stock Portfolio", emoji: "ð", color: "var(--green)", status: "Active", statusBg: "rgba(16,185,129,0.15)",
-        desc: "Trading on Vanguard â OX[, CVX, CRWD positions",
+        name: "Stock Portfolio", emoji: "📈", color: "var(--green)", status: "Active", statusBg: "rgba(16,185,129,0.15)",
+        desc: "Trading on Vanguard — OXY, CVX, CRWD positions",
         tasks: [
           { text: "Morning & evening briefings (automated)", priority: "low" },
           { text: "Review portfolio allocation", priority: "medium" },
@@ -548,8 +813,8 @@ HOÂY
         progress: 70,
       },
       {
-        name: "Social Media Automation", emoji: "ð¬", color: "var(--pink)", status: "Building", statusBg: "rgba(236,72,153,0.15)",
-        desc: "Auto video creation & posting â IG, LinkedIn, Facebook",
+        name: "Social Media Automation", emoji: "🎬", color: "var(--pink)", status: "Building", statusBg: "rgba(236,72,153,0.15)",
+        desc: "Auto video creation & posting — IG, LinkedIn, Facebook",
         tasks: [
           { text: "Complete Graph API permissions setup", priority: "high" },
           { text: "Build content posting pipeline", priority: "medium" },
@@ -582,43 +847,46 @@ HOÂY
       `).join("");
     }
 
-    // ââââââââââââââââââââââââââââââââââââââââââââââââââââââ(¼¼9=Q%%Q%=9L(¼¼VCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCV@(Õ¹Ñ¥½¸ÉÅÕÍÑ9½Ñ¥AÉµ¥ÍÍ¥½¸ ¤ì(¥ 9½Ñ¥¥Ñ¥½¸¥¸Ý¥¹½Ü¤ì(9½Ñ¥¥Ñ¥½¸¹ÉÅÕÍÑAÉµ¥ÍÍ¥½¸ ¤¹Ñ¡¸¡Àôøì(¥¡ÀôôôÉ¹Ñ¤ì(Í¡½Ý9½Ñ¥ 9½Ñ¥¥Ñ¥½¹Ì¹±¤ì(¹Ü9½Ñ¥¥Ñ¥½¸ 1ØÍÍ¥ÍÑ¹Ð°ì½äèe½Ô±°¹½ÜÉ¥ÙÉµ¥¹È±ÉÑÌ½¸å½ÕÈÁ¡½¹°¥½¸è½¥½¸´ÄäÈ¹Á¹ô¤ì(ô(ô¤ì(ô(ô((Õ¹Ñ¥½¸Í¡½Ý9½Ñ¥¡ÑáÐ¤ì(½¹ÍÐ¹¹Èô½Õµ¹Ð¹Ñ±µ¹Ñ	å% ¹½Ñ¥	¹¹È¤ì(¹¹È¹ÑáÑ½¹Ñ¹ÐôÑáÐì(¹¹È¹±ÍÍ1¥ÍÐ¹ Í¡½Ü¤ì(ÍÑQ¥µ½ÕÐ  ¤ôø¹¹È¹±ÍÍ1¥ÍÐ¹Éµ½Ù Í¡½Ü¤°ÌÀÀÀ¤ì(ô((¼¼¡¬Éµ¥¹ÉÌÙÉäµ¥¹ÕÑ(Õ¹Ñ¥½¸¡­Iµ¥¹ÉÌ ¤ì(½¹ÍÐ¹½ÜôÑ¹¹½Ü ¤ì(ÍÑÑ¹Éµ¥¹ÉÌ¹½É ¡Èôøì(¥ È¹½¹È¹¹½Ñ¥¥¹ÜÑ¡È¹Ñ¤¹ÑQ¥µ ¤ðô¹½Ü¤ì(È¹¹½Ñ¥¥ôÑÉÕì(ÍÙIµ¥¹ÉÌ ¤ì(Í¡½Ý9½Ñ¥ >À¬È¹Ñ¥Ñ±¤ì(¥ 9½Ñ¥¥Ñ¥½¸¥¸Ý¥¹½Ü9½Ñ¥¥Ñ¥½¸¹ÁÉµ¥ÍÍ¥½¸ôôôÉ¹Ñ¤ì(¹Ü9½Ñ¥¥Ñ¥½¸ >ÀIµ¥¹È°ì½äèÈ¹Ñ¥Ñ±°¥½¸è½¥½¸´ÄäÈ¹Á¹°Ù¥ÉÑèlÈÀÀ°ÄÀÀ°ÈÀÁtô¤ì(ô(ô(ô¤ì(ô(ÍÑ%¹ÑÉÙ°¡¡­Iµ¥¹ÉÌ°ÌÀÀÀÀ¤ì((¼¼VCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCV@(¼¼UQ%1%Q%L(¼¼VCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCV@¢gVæ7FöâW622²6öç7BBÒFö7VÖVçBæ7&VFTVÆVÖVçB&Fb"²BçFWD6öçFVçBÒ3²&WGW&âBæææW$DÔÃ²Ð ¢gVæ7Föâf÷&ÖDFFR6ò°¢6öç7BBÒæWrFFR6ò°¢6öç7Bæ÷rÒæWrFFR°¢6öç7BFöFÒæ÷rçFôFFU7G&ærÓÓÒBçFôFFU7G&ær°¢6öç7BFöÖ÷'&÷rÒæWrFFRæ÷rævWEFÖR²cCçFôFFU7G&ærÓÓÒBçFôFFU7G&ær° ¢6öç7BFÖRÒBçFôÆö6ÆUFÖU7G&ær&VâÕU2"Â²÷W#¢&çVÖW&2"ÂÖçWFS¢#"ÖFvB"Â÷W##¢G'VRÒ°¢bFöF&WGW&â%FöFB"²FÖS°¢bFöÖ÷'&÷r&WGW&â%FöÖ÷'&÷rB"²FÖS°¢&WGW&âBçFôÆö6ÆTFFU7G&ær&VâÕU2"Â²ÖöçF¢'6÷'B"ÂF¢&çVÖW&2"Ò²"B"²FÖS°¢Ð ¢gVæ7Föâ6÷u6WGFæw2°¢Fö7VÖVçBævWDVÆVÖVçD'B'6WGFæw4ÖöFÂ"æ6Æ74Æ7BæFB'6÷r"°¢Fö7VÖVçBævWDVÆVÖVçD'B&¶WçWB"çfÇVRÒ7FFRç6WGFæw2æ¶WÇÂ"#°¢Fö7VÖVçBævWDVÆVÖVçD'B'öæTçWB"çfÇVRÒ7FFRç6WGFæw2çöæRÇÂ"#°¢Ð¢gVæ7FöâFU6WGFæw2²Fö7VÖVçBævWDVÆVÖVçD'B'6WGFæw4ÖöFÂ"æ6Æ74Æ7Bç&VÖ÷fR'6÷r"²Ð¢gVæ7Föâ6÷u&VÖæFW$ÖöFÂ²Fö7VÖVçBævWDVÆVÖVçD'B'&VÖæFW$ÖöFÂ"æ6Æ74Æ7BæFB'6÷r"²Ð¢gVæ7FöâFU&VÖæFW$ÖöFÂ²Fö7VÖVçBævWDVÆVÖVçD'B'&VÖæFW$ÖöFÂ"æ6Æ74Æ7Bç&VÖ÷fR'6÷r"²Ð ¢òò)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y ¢òò4U%d4Rtõ$´U"bt¢òò)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y ¢b'6W'f6Uv÷&¶W""âæfvF÷"°¢æfvF÷"ç6W'f6Uv÷&¶W"ç&Vv7FW""÷7ræ§2"çFVâ"Óâ°¢6öç6öÆRæÆör%5r&Vv7FW&VC¢"Â"ç66÷R°¢Òæ6F6RÓâ6öç6öÆRæÆör%5rW'&÷#¢"ÂR°¢Ð ¢òò)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)YËÈSUËÈ8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥dØYÝ]J
-NÂY\ÚÛYJ
-NÂ[\[Z[\Ê
-NÂ[\ÚXÝÊ
-NÂËÈ\ÝÜHÚ]\ÝÜBY
-Ý]KÚ]\ÝÜK[Ý
-HÂÛÛÝÛÛZ[\HØÝ[Y[Ù][[Y[RY
-Ú]Y\ÜØYÙ\ÈNÂÝ]KÚ]\ÝÜKÜXXÚ
-HOÂÛÛÝ]HØÝ[Y[ÜX]Q[[Y[
-]NÂ]Û\ÜÓ[YHH\ÙÈ
-ÈKÛNÂ]^ÛÛ[HKÛÛ[ÂÛÛZ[\\[Ú[
-]NÂJNÂBËÈØÚY[H^\Ý[È[Z[\ÂÝ]K[Z[\Ë[\O\ÛH	\ÝYYY
-KÜXXÚ
-OÂØÚY[SÝYXØ][Û]K]È]J]JJNÂJNÂÛÛÛÛKÙÊ]\ÜÚ\Ý[
-ÈTÕTÒSÓ
-È[]X[^YNÂÜØÜ\R"À¢FW63¢$çfW7FÖVçBf&Ò(	BçfW7F÷"&VÆFöç2Â²ÓF7G&'WFöâÂFVÂ6÷W&6ær"À¢F6·3¢°¢²FWC¢%6VæB²Ó2FòÆÂçfW7F÷'2"Â&÷&G¢&v"ÒÀ¢²FWC¢$föÆÆ÷rWöât327VÖÖ'fVVF&6²"Â&÷&G¢&ÖVFVÒ"ÒÀ¢²FWC¢%&Wf÷"U$òÆÆæ6R6W76öâ"Â&÷&G¢&Æ÷r"ÒÀ¢ÒÀ¢&öw&W73¢CRÀ¢ÒÀ¢°¢æÖS¢$GæÖ2vVÆÂ6W'f6R"ÂVÖö¦¢.)©ûò"Â6öÆ÷#¢'f"ÒÖ66VçB"Â7FGW3¢$â&öw&W72"Â7FGW4&s¢'&v&SÃ3Ã#CbÃãR"À¢FW63¢$Eu2÷2&ö&B(	BtvFfæÆÆ¥2b7W&6R"À¢F6·3¢°¢²FWC¢$f77VW2æBW'&÷'2"Â&÷&G¢&v"ÒÀ¢²FWC¢%FW7B7W&6RçFVw&Föâ"Â&÷&G¢&ÖVFVÒ"ÒÀ¢ÒÀ¢&öw&W73¢3À¢ÒÀ¢°¢æÖS¢%7Fö6²÷'FföÆò"ÂVÖö¦¢/	ù8"Â6öÆ÷#¢'f"ÒÖw&VVâ"Â7FGW3¢$7FfR"Â7FGW4&s¢'&v&bÃRÃ#ÃãR"À¢FW63¢%G&FæröâfæwV&B(	Bõ²Â5eÂ5%tB÷6Föç2"À¢F6·3¢°¢²FWC¢$Ö÷&æærbWfVæær'&Vfæw2WFöÖFVB"Â&÷&G¢&Æ÷r"ÒÀ¢²FWC¢%&WfWr÷'FföÆòÆÆö6Föâ"Â&÷&G¢&ÖVFVÒ"ÒÀ¢ÒÀ¢&öw&W73¢sÀ¢ÒÀ¢°¢æÖS¢%6ö6ÂÖVFWFöÖFöâ"ÂVÖö¦¢/	øêÂ"Â6öÆ÷#¢'f"Ò×æ²"Â7FGW3¢$'VÆFær"Â7FGW4&s¢'&v&#3bÃs"ÃS2ÃãR"À¢FW63¢$WFòfFVò7&VFöâb÷7Fær(	BrÂÆæ¶VDâÂf6V&öö²"À¢F6·3¢°¢²FWC¢$6ö×ÆWFRw&W&Ö76öç26WGW"Â&÷&G¢&v"ÒÀ¢²FWC¢$'VÆB6öçFVçB÷7FærVÆæR"Â&÷&G¢&ÖVFVÒ"ÒÀ¢²FWC¢$7&VFRfFVòFV×ÆFW2"Â&÷&G¢&Æ÷r"ÒÀ¢ÒÀ¢&öw&W73¢#À¢ÒÀ¢Ó° ¢gVæ7Föâ&VæFW%&ö¦V7G2°¢6öç7BÆ7BÒFö7VÖVçBævWDVÆVÖVçD'B'&ö¦V7G4Æ7B"°¢Æ7BæææW$DÔÂÒ&ö¦V7G2æÖÓâ ¢ÆFb6Æ73Ò'&ö¦V7BÖ6&B#à¢ÆFb6Æ73Ò'&ö¦V7BÖVFW"#à¢ÆFb6Æ73Ò'&ö¦V7BÖ6öâ"7GÆSÒ&&6¶w&÷VæC¢G·ç7FGW4&wÒ#âG·æVÖö¦ÓÂöFcà¢ÆFb6Æ73Ò'&ö¦V7BÖæÖR#âG·ææÖWÓÂöFcà¢Ç7â6Æ73Ò'&ö¦V7B×7FGW2"7GÆSÒ&&6¶w&÷VæC¢G·ç7FGW4&wÓ¶6öÆ÷#¢G·æ6öÆ÷'Ò#âG·ç7FGW7ÓÂ÷7ãà¢ÂöFcà¢ÆFb6Æ73Ò'&ö¦V7BÖFW62#âG·æFW67ÓÂöFcà¢ÆFb6Æ73Ò'&öw&W72Ö&"#ãÆFb6Æ73Ò'&öw&W72ÖfÆÂ"7GÆSÒ'vGF¢G·ç&öw&W77ÒS¶&6¶w&÷VæC¢G·æ6öÆ÷'Ò#ãÂöFcãÂöFcà¢ÆFb6Æ73Ò'&ö¦V7B×F6·2#à¢G·çF6·2æÖBÓâ ¢ÆFb6Æ73Ò'&ö¦V7B×F6²#à¢ÆFb6Æ73Ò'F÷B"7GÆSÒ&&6¶w&÷VæC¢G·Bç&÷&GÓÓÒvvròwf"Ò×&VBr¢Bç&÷&GÓÓÒvÖVFVÒròwf"ÒÖvöÆBr¢wf"Ò×FWC2wÒ#ãÂöFcà¢G¶W62BçFWBÐ¢ÂöFcà¢æ¦öâ""Ð¢ÂöFcà¢ÂöFcà¢æ¦öâ""°¢Ð ¢òò)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)Y)YËÈÕQPÐUSÓÂËÈ8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d[Ý[Û\]Y\ÝÝY\Z\ÜÚ[Û
-HÂY
-ÝYXØ][Û[Ú[ÝÊHÂÝYXØ][Û\]Y\Ý\Z\ÜÚ[Û
-K[OÂY
-OOHÜ[YHÂÚÝÓÝYÝYXØ][ÛÈ[XYHNÂ]ÈÝYXØ][Û]\ÜÚ\Ý[ÈÙN[ÝIÛÝÈXÙZ]H[Z[\[\ÈÛ[Ý\ÛHHXÛÛÚXÛÛLNLÈJNÂBJNÂBB[Ý[ÛÚÝÓÝY^
-HÂÛÛÝ[\HØÝ[Y[Ù][[Y[RY
-ÝY[\NÂ[\^ÛÛ[H^Â[\Û\ÜÓ\ÝY
-ÚÝÈNÂÙ][Y[Ý]
+    // ══════════════════════════════════════════════════════
+    // NOTIFICATIONS
+    // ══════════════════════════════════════════════════════
+    function requestNotifPermission() {
+      if ("Notification" in window) {
+        Notification.requestPermission().then(p => {
+          if (p === "granted") {
+            showNotif("Notifications enabled!");
+            new Notification("Lev Assistant", { body: "You'll now receive reminder alerts on your phone!", icon: "/icon-192.png" });
+          }
+        });
+      }
+    }
 
+    function showNotif(text) {
+      const banner = document.getElementById("notifBanner");
+      banner.textContent = text;
+      banner.classList.add("show");
+      setTimeout(() => banner.classList.remove("show"), 3000);
+    }
 
-HO[\Û\ÜÓ\Ý[[ÝJÚÝÈKÌ
-NÂBËÈÚXÚÈ[Z[\È]\HZ[]B[Ý[ÛÚXÚÔ[Z[\Ê
-HÂÛÛÝÝÈH]KÝÊ
-NÂÝ]K[Z[\ËÜXXÚ
-OÂY
-\ÛH	\ÝYYY	]È]J]JKÙ][YJ
-HHÝÊHÂÝYYYHYNÂØ]T[Z[\Ê
-NÂÚÝÓÝY¸£ì
-È]JNÂY
-ÝYXØ][Û[Ú[ÝÈ	ÝYXØ][Û\Z\ÜÚ[ÛOOHÜ[YHÂ]ÈÝYXØ][Û¸£ì[Z[\ÈÙN]KXÛÛÚXÛÛLNLÈX]NÌLHJNÂBBJNÂBÙ][\[
-ÚXÚÔ[Z[\ËÌ
-NÂËÈ8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥dËÈUSUQTÂËÈ8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d
+    // Check reminders every minute
+    function checkReminders() {
+      const now = Date.now();
+      state.reminders.forEach(r => {
+        if (!r.done && !r.notified && new Date(r.date).getTime() <= now) {
+          r.notified = true;
+          saveReminders();
+          showNotif("⏰ " + r.title);
+          if ("Notification" in window && Notification.permission === "granted") {
+            new Notification("⏰ Reminder", { body: r.title, icon: "/icon-192.png", vibrate: [200, 100, 200] });
+          }
+        }
+      });
+    }
+    setInterval(checkReminders, 30000);
+
+    // ══════════════════════════════════════════════════════
+    // UTILITIES
+    // ══════════════════════════════════════════════════════
     function esc(s) { const d = document.createElement("div"); d.textContent = s; return d.innerHTML; }
 
     function formatDate(iso) {
@@ -642,14 +910,39 @@ NÂËÈ8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8¥d8
     function showReminderModal() { document.getElementById("reminderModal").classList.add("show"); }
     function hideReminderModal() { document.getElementById("reminderModal").classList.remove("show"); }
 
-    // ââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+    // ══════════════════════════════════════════════════════
     // SERVICE WORKER & PWA
-    // ââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+    // ══════════════════════════════════════════════════════
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker.register("/sw.js").then(r => {
         console.log("SW registered:", r.scope);
       }).catch(e => console.log("SW error:", e));
     }
 
-    // ââââââââââââââââââââââââââââââââââââââââââââââââââââââ(¼¼%9%P(¼¼VCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCVCV@(±½MÑÑ ¤ì(ÉÉÍ¡!½µ ¤ì(É¹ÉIµ¥¹ÉÌ ¤ì(É¹ÉAÉ½©ÑÌ ¤ì((¼¼IÍÑ½É¡Ð¡¥ÍÑ½Éä(¥¡ÍÑÑ¹¡Ñ!¥ÍÑ½Éä¹±¹Ñ øÀ¤ì(½¹ÍÐ½¹Ñ¥¹Èô½Õµ¹Ð¹Ñ±µ¹Ñ	å% ¡Ñ5ÍÍÌ¤ì(ÍÑÑ¹¡Ñ!¥ÍÑ½Éä¹½É ¡´ôøì(½¹ÍÐ¥Øô½Õµ¹Ð¹ÉÑ±µ¹Ð ¥Ø¤ì(¥Ø¹±ÍÍ9µôµÍ¬´¹É½±ì(¥Ø¹ÑáÑ½¹Ñ¹Ðô´¹½¹Ñ¹Ðì(½¹Ñ¥¹È¹ÁÁ¹¡¥±¡¥Ø¤ì(ô¤ì(ô((¼¼M¡Õ±á¥ÍÑ¥¹Éµ¥¹ÉÌ(ÍÑÑ¹Éµ¥¹ÉÌ¹¥±ÑÈ¡ÈôøÈ¹½¹È¹¹½Ñ¥¥¤¹½É ¡Èôøì(Í¡Õ±9½Ñ¥¥Ñ¥½¸¡È¹Ñ¥Ñ±°¹ÜÑ¡È¹Ñ¤¤ì(ô¤ì((½¹Í½±¹±½ 1ØÍÍ¥ÍÑ¹ÐØ¬AA}YIM%=8¬¥¹¥Ñ¥±¥é¤ì(ð½ÍÉ¥ÁÐø)</body>
+    // ══════════════════════════════════════════════════════
+    // INIT
+    // ══════════════════════════════════════════════════════
+    loadState();
+    refreshHome();
+    renderReminders(); renderProjects();
+
+    // Restore chat history
+    if (state.chatHistory.length > 0) {
+      const container = document.getElementById("chatMessages");
+      state.chatHistory.forEach(m => {
+        const div = document.createElement("div");
+        div.className = "msg " + m.role;
+        div.textContent = m.content;
+        container.appendChild(div);
+      });
+    }
+
+    // Schedule existing reminders
+    state.reminders.filter(r => !r.done && !r.notified).forEach(r => {
+      scheduleNotification(r.title, new Date(r.date));
+    });
+
+    console.log("Lev Assistant v" + APP_VERSION + " initialized");
+  </script>
+</body>
 </html>
