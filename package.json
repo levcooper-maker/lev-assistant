@@ -1,0 +1,16 @@
+{
+  "name": "lev-assistant",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Jarvis: a 24/7 personal assistant that triages, organizes and answers email across three inboxes and plans each day.",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "test": "node --test tests/*.test.js"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^1.6.0"
+  }
+}
