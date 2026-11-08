@@ -1,0 +1,45 @@
+name: Jarvis schedule
+
+# Keeps Jarvis working around the clock on any Vercel plan by calling the
+# app's cron endpoint. Needs two repository secrets:
+#   JARVIS_URL   e.g. https://lev-assistant.vercel.app
+#   CRON_SECRET  same value as CRON_SECRET in Vercel
+on:
+  schedule:
+    - cron: "*/10 * * * *" # inbox autopilot every 10 minutes
+    - cron: "40 11 * * *" # morning plan: 5:40 AM CST / 6:40 AM CDT
+  workflow_dispatch:
+    inputs:
+      job:
+        description: "Which job to run"
+        required: true
+        default: inbox
+        type: choice
+        options: [inbox, plan]
+
+permissions: {}
+
+concurrency:
+  group: jarvis-${{ github.event.schedule || inputs.job }}
+  cancel-in-progress: false
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - name: Call Jarvis
+        env:
+          JARVIS_URL: ${{ secrets.JARVIS_URL }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+          JOB: ${{ github.event.schedule == '40 11 * * *' && 'plan' || inputs.job || 'inbox' }}
+        run: |
+          if [ -z "$JARVIS_URL" ] || [ -z "$CRON_SECRET" ]; then
+            echo "JARVIS_URL / CRON_SECRET secrets are not set; skipping."
+            exit 0
+          fi
+          code=$(curl -sS -o response.json -w "%{http_code}" --max-time 320 \
+            -H "Authorization: Bearer $CRON_SECRET" \
+            "$JARVIS_URL/api/cron?job=$JOB")
+          cat response.json; echo
+          test "$code" = "200"

@@ -1,35 +1,39 @@
-export default async function handler(req, res) {
-    if (req.method !== "POST") {
-          return res.status(405).json({ error: "Method not allowed" });
-    }
-    try {
-          const { messages, system, apiKey } = req.body;
-          const key = apiKey || process.env.ANTHROPIC_API_KEY;
-          if (!key) {
-                  return res.status(400).json({ error: "No API key provided." });
-          }
-          const response = await fetch("https://api.anthropic.com/v1/messages", {
-                  method: "POST",
-                  headers: {
-                            "Content-Type": "application/json",
-                            "x-api-key": key,
-                            "anthropic-version": "2023-06-01",
-                  },
-                  body: JSON.stringify({
-                            model: "claude-sonnet-4-20250514",
-                            max_tokens: 1024,
-                            system: system || "You are a helpful assistant.",
-                            messages: messages || [],
-                  }),
-          });
-          if (!response.ok) {
-                  const errorText = await response.text();
-                  return res.status(response.status).json({ error: "API error: " + response.status });
-          }
-          const data = await response.json();
-          const content = data.content.filter(b => b.type === "text").map(b => b.text).join("\n");
-          return res.status(200).json({ content, usage: data.usage });
-    } catch (error) {
-          return res.status(500).json({ error: "Internal server error" });
-    }
+import { handler, send, body, requireUser, methodNotAllowed } from "../lib/http.js";
+import { runAgent, sendPrepared } from "../lib/agent.js";
+import { db, eq } from "../lib/db.js";
+
+const MAX_TURNS = 30;
+const MAX_CHARS = 20000;
+
+// Accepts only plain text turns, starting with the user and ending with
+// the user's newest message.
+export function cleanHistory(raw) {
+  if (!Array.isArray(raw)) return null;
+  const turns = raw
+    .filter((m) => m && (m.role === "user" || m.role === "assistant") && typeof m.content === "string" && m.content.trim())
+    .slice(-MAX_TURNS)
+    .map((m) => ({ role: m.role, content: m.content.slice(0, MAX_CHARS) }));
+  while (turns.length && turns[0].role !== "user") turns.shift();
+  if (!turns.length || turns[turns.length - 1].role !== "user") return null;
+  return turns;
 }
+
+export default handler(async (req, res) => {
+  if (req.method !== "POST") return methodNotAllowed(res);
+  if (!requireUser(req, res)) return;
+  const b = body(req);
+
+  if (b.action === "send") {
+    await sendPrepared(String(b.id));
+    return send(res, 200, { ok: true });
+  }
+  if (b.action === "discard") {
+    await db.update("outbox", { id: eq(b.id), status: "eq.pending" }, { status: "discarded" });
+    return send(res, 200, { ok: true });
+  }
+
+  const history = cleanHistory(b.messages);
+  if (!history) return send(res, 400, { error: "Send messages ending with a user turn" });
+  const result = await runAgent(history);
+  return send(res, 200, result);
+});
